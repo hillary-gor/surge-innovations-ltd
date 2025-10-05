@@ -1,13 +1,13 @@
-"use client"
+"use client";
 
-import Link from "next/link"
-import { Button } from "@/components/ui/button"
-import { Menu, X, Calendar } from "lucide-react"
-import { useState } from "react"
-import Image from "next/image"
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { Menu, X, Calendar } from "lucide-react";
+import { useState } from "react";
+import Image from "next/image";
 
 export function Navigation() {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const navLinks = [
     { href: "/", label: "Home" },
@@ -18,7 +18,7 @@ export function Navigation() {
     { href: "/pricing", label: "Pricing" },
     { href: "/resources", label: "Resources" },
     { href: "/join-team", label: "Join Team" },
-  ]
+  ];
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 border-b border-border bg-background/80 backdrop-blur-lg">
@@ -26,7 +26,13 @@ export function Navigation() {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2">
-            <Image src="/surge-logo.png" alt="Surge Innovations" width={120} height={40} className="h-8 w-auto" />
+            <Image
+              src="/surge-logo.png"
+              alt="Surge Innovations"
+              width={120}
+              height={40}
+              className="h-8 w-auto"
+            />
           </Link>
 
           {/* Desktop Navigation */}
@@ -61,7 +67,11 @@ export function Navigation() {
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             aria-label="Toggle menu"
           >
-            {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+            {mobileMenuOpen ? (
+              <X className="h-6 w-6" />
+            ) : (
+              <Menu className="h-6 w-6" />
+            )}
           </button>
         </div>
 
@@ -79,7 +89,10 @@ export function Navigation() {
               </Link>
             ))}
             <Button variant="outline" asChild className="w-full bg-transparent">
-              <Link href="/schedule-visit" onClick={() => setMobileMenuOpen(false)}>
+              <Link
+                href="/schedule-visit"
+                onClick={() => setMobileMenuOpen(false)}
+              >
                 <Calendar className="h-4 w-4 mr-2" />
                 Schedule Visit
               </Link>
@@ -93,5 +106,5 @@ export function Navigation() {
         )}
       </div>
     </nav>
-  )
+  );
 }
