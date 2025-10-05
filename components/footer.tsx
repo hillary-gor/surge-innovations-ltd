@@ -18,7 +18,7 @@ export function Footer() {
                 className="h-10 w-auto"
               />
               <p className="text-muted-foreground">
-                Technology that moves with your vision
+                Strategy, Code & Scalable Impact
               </p>
             </div>
 
