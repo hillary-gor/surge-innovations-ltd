@@ -211,21 +211,21 @@ export default function ContactPage() {
                       icon: Mail,
                       title: "Email Us",
                       lines: [
-                        "hello@surgeinnovations.com",
+                        "sales@surgeinnovations.org",
                         "We’ll respond within 24 hours",
                       ],
                     },
                     {
                       icon: Phone,
                       title: "Call Us",
-                      lines: ["+1 (555) 123-4567", "Mon-Fri, 9am-6pm EST"],
+                      lines: ["+254 (113) 015-069", "Mon-Fri, 9am-6pm EST"],
                     },
                     {
                       icon: MapPin,
                       title: "Visit Us",
                       lines: [
-                        "123 Innovation Drive",
-                        "San Francisco, CA 94105",
+                        "City House, Standard Street",
+                        "Nairobi, 00100, Kenya",
                       ],
                     },
                   ].map(({ icon: Icon, title, lines }, idx) => (
