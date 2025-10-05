@@ -102,7 +102,7 @@ export default function CaseStudiesPage() {
       <main className="min-h-screen pt-16">
         {/* Hero Section */}
         <section className="py-24 md:py-32">
-          <div className="container px-4">
+          <div className="mx-auto w-full max-w-7xl px-4 md:px-6 lg:px-8">
             <div className="max-w-3xl mx-auto text-center space-y-6">
               <h1 className="text-5xl md:text-6xl font-bold tracking-tight text-balance">
                 Real Results for{" "}
@@ -119,7 +119,7 @@ export default function CaseStudiesPage() {
 
         {/* Case Studies Grid */}
         <section className="py-16">
-          <div className="container px-4">
+          <div className="mx-auto w-full max-w-7xl px-4 md:px-6 lg:px-8">
             <div className="max-w-7xl mx-auto space-y-24">
               {caseStudies.map((study, index) => (
                 <div
@@ -181,11 +181,14 @@ export default function CaseStudiesPage() {
                     )}
                   </div>
                   <div className={index % 2 === 1 ? "md:order-1" : ""}>
-                    <div className="rounded-lg overflow-hidden border border-border shadow-lg">
+                    <div className="relative rounded-lg overflow-hidden border border-border shadow-lg aspect-[16/9]">
                       <Image
                         src={study.image || "/placeholder.svg"}
                         alt={study.title}
-                        className="w-full h-auto"
+                        fill
+                        className="object-cover"
+                        sizes="(max-width: 768px) 100vw, 50vw"
+                        priority={index === 0}
                       />
                     </div>
                   </div>
@@ -197,7 +200,7 @@ export default function CaseStudiesPage() {
 
         {/* Stats Section */}
         <section className="py-24 bg-muted/30">
-          <div className="container px-4">
+          <div className="mx-auto w-full max-w-7xl px-4 md:px-6 lg:px-8">
             <div className="max-w-5xl mx-auto grid md:grid-cols-4 gap-8 text-center">
               <div className="space-y-2">
                 <div className="text-4xl md:text-5xl font-bold text-primary">
@@ -229,7 +232,7 @@ export default function CaseStudiesPage() {
 
         {/* CTA Section */}
         <section className="py-24">
-          <div className="container px-4">
+          <div className="mx-auto w-full max-w-7xl px-4 md:px-6 lg:px-8">
             <div className="max-w-3xl mx-auto text-center space-y-8">
               <h2 className="text-3xl md:text-4xl font-bold">
                 Ready to Write Your Success Story?

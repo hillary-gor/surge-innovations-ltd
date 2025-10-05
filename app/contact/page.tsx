@@ -1,12 +1,11 @@
 "use client";
 
 import type React from "react";
-
+import { useState } from "react";
 import { Navigation } from "@/components/navigation";
 import { Footer } from "@/components/footer";
 import { Button } from "@/components/ui/button";
 import { Mail, Phone, MapPin, Send } from "lucide-react";
-import { useState } from "react";
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
@@ -21,7 +20,6 @@ export default function ContactPage() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle form submission
     console.log("[v0] Form submitted:", formData);
   };
 
@@ -39,10 +37,10 @@ export default function ContactPage() {
   return (
     <>
       <Navigation />
-      <main className="min-h-screen pt-16">
+      <main className="min-h-screen pt-16 overflow-x-hidden">
         {/* Hero Section */}
         <section className="py-24 md:py-32">
-          <div className="container px-4">
+          <div className="mx-auto w-full max-w-7xl px-4 md:px-6 lg:px-8">
             <div className="max-w-3xl mx-auto text-center space-y-6">
               <h1 className="text-5xl md:text-6xl font-bold tracking-tight text-balance">
                 Let&apos;s Build{" "}
@@ -58,7 +56,7 @@ export default function ContactPage() {
 
         {/* Contact Form & Info */}
         <section className="py-16">
-          <div className="container px-4">
+          <div className="mx-auto w-full max-w-7xl px-4 md:px-6 lg:px-8">
             <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-12">
               {/* Contact Form */}
               <div className="space-y-8">
@@ -208,79 +206,64 @@ export default function ContactPage() {
                 </div>
 
                 <div className="space-y-6">
-                  <div className="flex items-start gap-4 p-6 bg-card rounded-lg border border-border">
-                    <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
-                      <Mail className="h-6 w-6 text-primary" />
+                  {[
+                    {
+                      icon: Mail,
+                      title: "Email Us",
+                      lines: [
+                        "hello@surgeinnovations.com",
+                        "We’ll respond within 24 hours",
+                      ],
+                    },
+                    {
+                      icon: Phone,
+                      title: "Call Us",
+                      lines: ["+1 (555) 123-4567", "Mon-Fri, 9am-6pm EST"],
+                    },
+                    {
+                      icon: MapPin,
+                      title: "Visit Us",
+                      lines: [
+                        "123 Innovation Drive",
+                        "San Francisco, CA 94105",
+                      ],
+                    },
+                  ].map(({ icon: Icon, title, lines }, idx) => (
+                    <div
+                      key={idx}
+                      className="flex items-start gap-4 p-6 bg-card rounded-lg border border-border"
+                    >
+                      <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
+                        <Icon className="h-6 w-6 text-primary" />
+                      </div>
+                      <div className="space-y-1">
+                        <h3 className="font-semibold">{title}</h3>
+                        {lines.map((line, i) => (
+                          <p key={i} className="text-muted-foreground">
+                            {line}
+                          </p>
+                        ))}
+                      </div>
                     </div>
-                    <div className="space-y-1">
-                      <h3 className="font-semibold">Email Us</h3>
-                      <p className="text-muted-foreground">
-                        hello@surgeinnovations.com
-                      </p>
-                      <p className="text-sm text-muted-foreground">
-                        We&apos;ll respond within 24 hours
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-start gap-4 p-6 bg-card rounded-lg border border-border">
-                    <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
-                      <Phone className="h-6 w-6 text-primary" />
-                    </div>
-                    <div className="space-y-1">
-                      <h3 className="font-semibold">Call Us</h3>
-                      <p className="text-muted-foreground">+1 (555) 123-4567</p>
-                      <p className="text-sm text-muted-foreground">
-                        Mon-Fri, 9am-6pm EST
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-start gap-4 p-6 bg-card rounded-lg border border-border">
-                    <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
-                      <MapPin className="h-6 w-6 text-primary" />
-                    </div>
-                    <div className="space-y-1">
-                      <h3 className="font-semibold">Visit Us</h3>
-                      <p className="text-muted-foreground">
-                        123 Innovation Drive
-                      </p>
-                      <p className="text-muted-foreground">
-                        San Francisco, CA 94105
-                      </p>
-                    </div>
-                  </div>
+                  ))}
                 </div>
 
                 <div className="p-6 bg-muted/30 rounded-lg space-y-4">
                   <h3 className="font-semibold">What Happens Next?</h3>
                   <ol className="space-y-3 text-sm text-muted-foreground">
-                    <li className="flex gap-3">
-                      <span className="font-semibold text-primary">1.</span>
-                      <span>
-                        We&apos;ll review your message and schedule a discovery
-                        call
-                      </span>
-                    </li>
-                    <li className="flex gap-3">
-                      <span className="font-semibold text-primary">2.</span>
-                      <span>
-                        We&apos;ll discuss your goals, requirements, and
-                        timeline
-                      </span>
-                    </li>
-                    <li className="flex gap-3">
-                      <span className="font-semibold text-primary">3.</span>
-                      <span>
-                        We&apos;ll provide a detailed proposal and custom quote
-                      </span>
-                    </li>
-                    <li className="flex gap-3">
-                      <span className="font-semibold text-primary">4.</span>
-                      <span>
-                        Once approved, we&apos;ll kick off your project!
-                      </span>
-                    </li>
+                    {[
+                      "We’ll review your message and schedule a discovery call",
+                      "We’ll discuss your goals, requirements, and timeline",
+                      "We’ll provide a detailed proposal and custom quote",
+                      "Once approved, we’ll kick off your project!",
+                    ].map((step, i) => (
+                      <li key={i} className="flex gap-3">
+                        <span className="font-semibold text-primary">
+                          {i + 1}.
+                        </span>
+                        <span>{step}</span>
+                      </li>
+                    ))}
                   </ol>
                 </div>
               </div>
@@ -290,7 +273,7 @@ export default function ContactPage() {
 
         {/* FAQ Section */}
         <section className="py-24 bg-muted/30">
-          <div className="container px-4">
+          <div className="mx-auto w-full max-w-7xl px-4 md:px-6 lg:px-8">
             <div className="max-w-3xl mx-auto space-y-12">
               <div className="text-center space-y-4">
                 <h2 className="text-3xl md:text-4xl font-bold">
@@ -304,9 +287,9 @@ export default function ContactPage() {
                   </h3>
                   <p className="text-muted-foreground leading-relaxed">
                     Project timelines vary based on complexity and scope. Simple
-                    projects can be completed in 4-8 weeks, while more complex
-                    platforms may take 3-6 months. We&apos;ll provide a detailed
-                    timeline during our discovery phase.
+                    projects can be completed in 4–8 weeks, while complex
+                    platforms may take 3–6 months. We’ll share a detailed
+                    timeline during discovery.
                   </p>
                 </div>
                 <div className="space-y-3">
@@ -314,8 +297,8 @@ export default function ContactPage() {
                     Do you work with organizations outside the US?
                   </h3>
                   <p className="text-muted-foreground leading-relaxed">
-                    Yes! We work with clients globally and have experience
-                    managing projects across different time zones and regions.
+                    Absolutely. We serve clients globally across multiple time
+                    zones and regions with distributed teams.
                   </p>
                 </div>
                 <div className="space-y-3">
@@ -323,10 +306,9 @@ export default function ContactPage() {
                     What if I&apos;m not sure exactly what I need?
                   </h3>
                   <p className="text-muted-foreground leading-relaxed">
-                    That&apos;s perfectly fine! Our discovery process is
-                    designed to help clarify your needs and identify the best
-                    solutions. We&apos;ll guide you through the entire planning
-                    process.
+                    That’s totally fine — our discovery process helps clarify
+                    your needs and identify the right solutions. We’ll guide you
+                    step-by-step.
                   </p>
                 </div>
               </div>

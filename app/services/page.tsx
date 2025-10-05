@@ -1,3 +1,5 @@
+"use client";
+
 import { Navigation } from "@/components/navigation";
 import { Footer } from "@/components/footer";
 import { Button } from "@/components/ui/button";
@@ -16,6 +18,7 @@ import {
   Rocket,
 } from "lucide-react";
 import Link from "next/link";
+import { motion } from "framer-motion";
 
 export default function ServicesPage() {
   const services = [
@@ -169,9 +172,9 @@ export default function ServicesPage() {
     <>
       <Navigation />
       <main className="min-h-screen pt-16">
-        {/* Hero Section */}
+        {/* Hero */}
         <section className="py-24 md:py-32">
-          <div className="container px-4">
+          <div className="mx-auto w-full max-w-7xl px-4 md:px-6 lg:px-8">
             <div className="max-w-3xl mx-auto text-center space-y-6">
               <h1 className="text-5xl md:text-6xl font-bold tracking-tight text-balance">
                 Comprehensive{" "}
@@ -187,70 +190,82 @@ export default function ServicesPage() {
 
         {/* Services Grid */}
         <section className="py-16">
-          <div className="container px-4">
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
-              {services.map((service, index) => (
-                <div
-                  key={index}
-                  className="p-6 bg-card rounded-lg border border-border space-y-4 hover:shadow-lg transition-shadow"
-                >
-                  <service.icon className="h-10 w-10 text-primary" />
-                  <h3 className="text-xl font-semibold">{service.title}</h3>
-                  <p className="text-muted-foreground leading-relaxed">
-                    {service.description}
-                  </p>
-                  <ul className="space-y-2">
-                    {service.features.map((feature, idx) => (
-                      <li
-                        key={idx}
-                        className="text-sm text-muted-foreground flex items-center gap-2"
-                      >
-                        <div className="w-1.5 h-1.5 rounded-full bg-primary" />
-                        {feature}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ))}
+          <div className="mx-auto w-full max-w-7xl px-4 md:px-6 lg:px-8">
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {services.map((service, index) => {
+                const Icon = service.icon;
+                return (
+                  <motion.div
+                    key={index}
+                    whileHover={{ y: -6 }}
+                    transition={{ type: "spring", stiffness: 200, damping: 15 }}
+                    className="p-6 bg-card rounded-lg border border-border space-y-4 hover:shadow-lg transition-all"
+                  >
+                    <Icon className="h-10 w-10 text-primary" />
+                    <h3 className="text-xl font-semibold">{service.title}</h3>
+                    <p className="text-muted-foreground leading-relaxed">
+                      {service.description}
+                    </p>
+                    <ul className="space-y-2">
+                      {service.features.map((feature, idx) => (
+                        <li
+                          key={idx}
+                          className="text-sm text-muted-foreground flex items-center gap-2"
+                        >
+                          <div className="w-1.5 h-1.5 rounded-full bg-primary" />
+                          {feature}
+                        </li>
+                      ))}
+                    </ul>
+                  </motion.div>
+                );
+              })}
+            </div>
+            <div className="text-center mt-16">
+              <Button asChild size="lg">
+                <Link href="/contact">Talk to Our Team</Link>
+              </Button>
             </div>
           </div>
         </section>
 
-        {/* Process Section */}
+        {/* Process */}
         <section className="py-24 bg-muted/30">
-          <div className="container px-4">
+          <div className="mx-auto w-full max-w-7xl px-4 md:px-6 lg:px-8">
             <div className="max-w-3xl mx-auto text-center space-y-4 mb-16">
               <h2 className="text-3xl md:text-4xl font-bold">Our Process</h2>
               <p className="text-lg text-muted-foreground">
                 A proven approach to delivering exceptional results
               </p>
             </div>
-            <div className="max-w-5xl mx-auto grid md:grid-cols-4 gap-8">
+
+            <div className="max-w-5xl mx-auto grid md:grid-cols-4 gap-10 relative">
               {[
                 {
                   step: "1",
                   title: "Discovery",
                   desc:
-                    "We learn about your goals, challenges, and requirements",
+                    "We learn about your goals, challenges, and requirements.",
                 },
                 {
                   step: "2",
                   title: "Design",
-                  desc: "We create wireframes and prototypes for your approval",
+                  desc:
+                    "We create wireframes and prototypes for your approval.",
                 },
                 {
                   step: "3",
                   title: "Development",
-                  desc: "We build your platform with regular progress updates",
+                  desc: "We build your platform with regular progress updates.",
                 },
                 {
                   step: "4",
                   title: "Launch & Support",
-                  desc: "We deploy your solution and provide ongoing support",
+                  desc: "We deploy your solution and provide ongoing support.",
                 },
-              ].map((item, idx) => (
-                <div key={idx} className="text-center space-y-4">
-                  <div className="w-16 h-16 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-2xl font-bold mx-auto">
+              ].map((item, i) => (
+                <div key={i} className="text-center space-y-4">
+                  <div className="w-16 h-16 rounded-full bg-gradient-to-br from-primary to-primary/70 text-primary-foreground flex items-center justify-center text-2xl font-bold mx-auto shadow-md">
                     {item.step}
                   </div>
                   <h3 className="text-xl font-semibold">{item.title}</h3>
@@ -261,16 +276,16 @@ export default function ServicesPage() {
           </div>
         </section>
 
-        {/* CTA Section */}
+        {/* CTA */}
         <section className="py-24">
-          <div className="container px-4">
+          <div className="mx-auto w-full max-w-7xl px-4 md:px-6 lg:px-8">
             <div className="max-w-3xl mx-auto text-center space-y-8">
               <h2 className="text-3xl md:text-4xl font-bold">
                 Ready to Get Started?
               </h2>
               <p className="text-lg text-muted-foreground">
-                Let&apos;s discuss your project and how we can help bring your vision
-                to life.
+                Let&apos;s discuss your project and how we can help bring your
+                vision to life.
               </p>
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
                 <Button size="lg" asChild>
