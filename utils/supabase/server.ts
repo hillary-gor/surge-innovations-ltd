@@ -1,7 +1,6 @@
-// utils/supabase/server.ts
 "use server";
 
-import { createServerClient } from "@supabase/ssr";
+import { createServerClient, type CookieOptions } from "@supabase/ssr";
 import { cookies } from "next/headers";
 
 export async function createClient() {
@@ -15,17 +14,23 @@ export async function createClient() {
         getAll() {
           return cookieStore.getAll();
         },
-        setAll(cookiesToSet) {
+        setAll(
+          cookiesToSet: {
+            name: string;
+            value: string;
+            options: CookieOptions;
+          }[]
+        ) {
           try {
-            cookiesToSet.forEach(({ name, value, options }) => {
+            for (const { name, value, options } of cookiesToSet) {
               cookieStore.set(name, value, options);
-            });
-          } catch (e) {
-            console.warn("Error setting cookie in server component:", e);
+            }
+          } catch (error) {
+            console.warn("Error setting cookies in server component:", error);
           }
         },
       },
-    },
+    }
   );
 }
 
@@ -40,10 +45,8 @@ export async function createAdminClient() {
         getAll() {
           return cookieStore.getAll();
         },
-        setAll() {
-          // No-op for admin client as it typically doesn't interact with user session cookies
-        },
+        setAll() {},
       },
-    },
+    }
   );
 }

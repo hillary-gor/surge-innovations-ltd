@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Menu, X, Calendar } from "lucide-react";
 import { useState } from "react";
 import Image from "next/image";
+import { AuthHeader } from "@/components/layout/AuthHeader";
 
 export function Navigation() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -17,6 +18,7 @@ export function Navigation() {
     { href: "/pricing", label: "Pricing" },
     { href: "/resources", label: "Resources" },
     { href: "/join-team", label: "Join Team" },
+    { href: "/contact", label: "Contact" },
   ];
 
   return (
@@ -47,7 +49,7 @@ export function Navigation() {
             ))}
           </div>
 
-          {/* CTA Button */}
+          {/* CTA + AuthHeader (right side) */}
           <div className="hidden md:flex items-center gap-3">
             <Button variant="outline" asChild>
               <Link href="/schedule-visit">
@@ -55,9 +57,9 @@ export function Navigation() {
                 Schedule Visit
               </Link>
             </Button>
-            <Button asChild>
-              <Link href="/contact">Contact Us</Link>
-            </Button>
+
+            {/* Auth Header (user avatar / sign in) */}
+            <AuthHeader />
           </div>
 
           {/* Mobile Menu Button */}
@@ -101,6 +103,11 @@ export function Navigation() {
                 Contact Us
               </Link>
             </Button>
+
+            {/* AuthHeader in mobile view */}
+            <div className="pt-2 border-t border-border">
+              <AuthHeader />
+            </div>
           </div>
         )}
       </div>
