@@ -1,14 +1,25 @@
 "use client";
 
-import type React from "react";
-import { useState } from "react";
+import React, { useState } from "react";
 import { Navigation } from "@/components/navigation";
 import { Footer } from "@/components/footer";
 import { Button } from "@/components/ui/button";
 import { Mail, Phone, MapPin, Send } from "lucide-react";
+import { toast } from "sonner";
+import { createClient } from "@/utils/supabase/client";
+
+interface ContactFormData {
+  name: string;
+  email: string;
+  company?: string;
+  phone?: string;
+  projectType: string;
+  budget?: string;
+  message: string;
+}
 
 export default function ContactPage() {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<ContactFormData>({
     name: "",
     email: "",
     company: "",
@@ -18,9 +29,51 @@ export default function ContactPage() {
     message: "",
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const supabase = createClient();
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("[v0] Form submitted:", formData);
+    setIsSubmitting(true);
+
+    const { name, email, projectType, message } = formData;
+    if (!name || !email || !projectType || !message) {
+      toast.warning("Please fill out all required fields.");
+      setIsSubmitting(false);
+      return;
+    }
+
+    try {
+      const { error } = await supabase.from("contact_messages").insert([
+        {
+          name: formData.name,
+          email: formData.email,
+          company: formData.company,
+          phone: formData.phone,
+          project_type: formData.projectType,
+          budget: formData.budget,
+          message: formData.message,
+        },
+      ]);
+
+      if (error) throw error;
+
+      toast.success("Message sent successfully! We'll get back to you soon.");
+      setFormData({
+        name: "",
+        email: "",
+        company: "",
+        phone: "",
+        projectType: "",
+        budget: "",
+        message: "",
+      });
+    } catch (err) {
+      console.error("Error sending message:", err);
+      toast.error("Something went wrong. Please try again later.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleChange = (
@@ -28,10 +81,8 @@ export default function ContactPage() {
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
     >
   ) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   return (
@@ -67,129 +118,104 @@ export default function ContactPage() {
                     within 24 hours.
                   </p>
                 </div>
+
                 <form onSubmit={handleSubmit} className="space-y-6">
+                  {/* Row 1 */}
                   <div className="grid md:grid-cols-2 gap-6">
-                    <div className="space-y-2">
-                      <label htmlFor="name" className="text-sm font-medium">
-                        Name *
-                      </label>
-                      <input
-                        type="text"
-                        id="name"
-                        name="name"
-                        required
-                        value={formData.name}
-                        onChange={handleChange}
-                        className="w-full px-4 py-3 rounded-lg border border-input bg-background"
-                        placeholder="John Doe"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <label htmlFor="email" className="text-sm font-medium">
-                        Email *
-                      </label>
-                      <input
-                        type="email"
-                        id="email"
-                        name="email"
-                        required
-                        value={formData.email}
-                        onChange={handleChange}
-                        className="w-full px-4 py-3 rounded-lg border border-input bg-background"
-                        placeholder="john@example.com"
-                      />
-                    </div>
-                  </div>
-                  <div className="grid md:grid-cols-2 gap-6">
-                    <div className="space-y-2">
-                      <label htmlFor="company" className="text-sm font-medium">
-                        Company
-                      </label>
-                      <input
-                        type="text"
-                        id="company"
-                        name="company"
-                        value={formData.company}
-                        onChange={handleChange}
-                        className="w-full px-4 py-3 rounded-lg border border-input bg-background"
-                        placeholder="Your Company"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <label htmlFor="phone" className="text-sm font-medium">
-                        Phone
-                      </label>
-                      <input
-                        type="tel"
-                        id="phone"
-                        name="phone"
-                        value={formData.phone}
-                        onChange={handleChange}
-                        className="w-full px-4 py-3 rounded-lg border border-input bg-background"
-                        placeholder="+1 (555) 000-0000"
-                      />
-                    </div>
-                  </div>
-                  <div className="space-y-2">
-                    <label
-                      htmlFor="projectType"
-                      className="text-sm font-medium"
-                    >
-                      Project Type *
-                    </label>
-                    <select
-                      id="projectType"
-                      name="projectType"
+                    <FormInput
+                      label="Name *"
+                      id="name"
+                      name="name"
                       required
-                      value={formData.projectType}
+                      value={formData.name}
                       onChange={handleChange}
-                      className="w-full px-4 py-3 rounded-lg border border-input bg-background"
-                    >
-                      <option value="">Select a project type</option>
-                      <option value="web-app">Web Application</option>
-                      <option value="mobile-app">Mobile Application</option>
-                      <option value="platform">Custom Platform</option>
-                      <option value="integration">System Integration</option>
-                      <option value="consulting">Consulting</option>
-                      <option value="other">Other</option>
-                    </select>
-                  </div>
-                  <div className="space-y-2">
-                    <label htmlFor="budget" className="text-sm font-medium">
-                      Budget Range
-                    </label>
-                    <select
-                      id="budget"
-                      name="budget"
-                      value={formData.budget}
-                      onChange={handleChange}
-                      className="w-full px-4 py-3 rounded-lg border border-input bg-background"
-                    >
-                      <option value="">Select a budget range</option>
-                      <option value="under-25k">Under $25,000</option>
-                      <option value="25k-50k">$25,000 - $50,000</option>
-                      <option value="50k-100k">$50,000 - $100,000</option>
-                      <option value="100k-plus">$100,000+</option>
-                      <option value="not-sure">Not sure yet</option>
-                    </select>
-                  </div>
-                  <div className="space-y-2">
-                    <label htmlFor="message" className="text-sm font-medium">
-                      Project Details *
-                    </label>
-                    <textarea
-                      id="message"
-                      name="message"
+                      placeholder="John Doe"
+                    />
+                    <FormInput
+                      label="Email *"
+                      id="email"
+                      name="email"
+                      type="email"
                       required
-                      value={formData.message}
+                      value={formData.email}
                       onChange={handleChange}
-                      rows={6}
-                      className="w-full px-4 py-3 rounded-lg border border-input bg-background resize-none"
-                      placeholder="Tell us about your project, goals, and timeline..."
+                      placeholder="john@example.com"
                     />
                   </div>
-                  <Button type="submit" size="lg" className="w-full">
-                    Send Message
+
+                  {/* Row 2 */}
+                  <div className="grid md:grid-cols-2 gap-6">
+                    <FormInput
+                      label="Company"
+                      id="company"
+                      name="company"
+                      value={formData.company}
+                      onChange={handleChange}
+                      placeholder="Your Company"
+                    />
+                    <FormInput
+                      label="Phone"
+                      id="phone"
+                      name="phone"
+                      type="tel"
+                      value={formData.phone}
+                      onChange={handleChange}
+                      placeholder="+1 (555) 000-0000"
+                    />
+                  </div>
+
+                  {/* Project Type */}
+                  <FormSelect
+                    label="Project Type *"
+                    id="projectType"
+                    name="projectType"
+                    required
+                    value={formData.projectType}
+                    onChange={handleChange}
+                    options={[
+                      "Web Application",
+                      "Mobile Application",
+                      "Custom Platform",
+                      "System Integration",
+                      "Consulting",
+                      "Other",
+                    ]}
+                  />
+
+                  {/* Budget */}
+                  <FormSelect
+                    label="Budget Range"
+                    id="budget"
+                    name="budget"
+                    value={formData.budget}
+                    onChange={handleChange}
+                    options={[
+                      "Under $25,000",
+                      "$25,000 - $50,000",
+                      "$50,000 - $100,000",
+                      "$100,000+",
+                      "Not sure yet",
+                    ]}
+                  />
+
+                  {/* Message */}
+                  <FormTextarea
+                    label="Project Details *"
+                    id="message"
+                    name="message"
+                    required
+                    value={formData.message}
+                    onChange={handleChange}
+                    placeholder="Tell us about your project, goals, and timeline..."
+                  />
+
+                  <Button
+                    type="submit"
+                    size="lg"
+                    className="w-full"
+                    disabled={isSubmitting}
+                  >
+                    {isSubmitting ? "Sending..." : "Send Message"}
                     <Send className="ml-2 h-5 w-5" />
                   </Button>
                 </form>
@@ -218,7 +244,7 @@ export default function ContactPage() {
                     {
                       icon: Phone,
                       title: "Call Us",
-                      lines: ["+254 (113) 015-069", "Mon-Fri, 9am-6pm EST"],
+                      lines: ["+254 (113) 015-069", "Mon-Fri, 9am-6pm EAT"],
                     },
                     {
                       icon: MapPin,
@@ -281,36 +307,18 @@ export default function ContactPage() {
                 </h2>
               </div>
               <div className="space-y-8">
-                <div className="space-y-3">
-                  <h3 className="text-xl font-semibold">
-                    How long does a typical project take?
-                  </h3>
-                  <p className="text-muted-foreground leading-relaxed">
-                    Project timelines vary based on complexity and scope. Simple
-                    projects can be completed in 4–8 weeks, while complex
-                    platforms may take 3–6 months. We’ll share a detailed
-                    timeline during discovery.
-                  </p>
-                </div>
-                <div className="space-y-3">
-                  <h3 className="text-xl font-semibold">
-                    Do you work with organizations outside the US?
-                  </h3>
-                  <p className="text-muted-foreground leading-relaxed">
-                    Absolutely. We serve clients globally across multiple time
-                    zones and regions with distributed teams.
-                  </p>
-                </div>
-                <div className="space-y-3">
-                  <h3 className="text-xl font-semibold">
-                    What if I&apos;m not sure exactly what I need?
-                  </h3>
-                  <p className="text-muted-foreground leading-relaxed">
-                    That’s totally fine — our discovery process helps clarify
-                    your needs and identify the right solutions. We’ll guide you
-                    step-by-step.
-                  </p>
-                </div>
+                <FAQItem
+                  q="How long does a typical project take?"
+                  a="Project timelines vary based on complexity and scope. Simple projects can be completed in 4–8 weeks, while complex platforms may take 3–6 months."
+                />
+                <FAQItem
+                  q="Do you work with organizations outside Kenya?"
+                  a="Absolutely. We serve clients globally across multiple time zones and regions."
+                />
+                <FAQItem
+                  q="What if I’m not sure exactly what I need?"
+                  a="That’s totally fine — our discovery process helps clarify your needs and identify the right solutions."
+                />
               </div>
             </div>
           </div>
@@ -319,5 +327,130 @@ export default function ContactPage() {
         <Footer />
       </main>
     </>
+  );
+}
+
+// --- Reusable Inputs ---
+function FormInput({
+  label,
+  id,
+  name,
+  type = "text",
+  required,
+  value,
+  onChange,
+  placeholder,
+}: {
+  label: string;
+  id: string;
+  name: string;
+  type?: string;
+  required?: boolean;
+  value: string | undefined;
+  onChange: React.ChangeEventHandler<HTMLInputElement>;
+  placeholder?: string;
+}) {
+  return (
+    <div className="space-y-2">
+      <label htmlFor={id} className="text-sm font-medium">
+        {label}
+      </label>
+      <input
+        type={type}
+        id={id}
+        name={name}
+        required={required}
+        value={value}
+        onChange={onChange}
+        className="w-full px-4 py-3 rounded-lg border border-input bg-background"
+        placeholder={placeholder}
+      />
+    </div>
+  );
+}
+
+function FormSelect({
+  label,
+  id,
+  name,
+  required,
+  value,
+  onChange,
+  options,
+}: {
+  label: string;
+  id: string;
+  name: string;
+  required?: boolean;
+  value: string | undefined;
+  onChange: React.ChangeEventHandler<HTMLSelectElement>;
+  options: string[];
+}) {
+  return (
+    <div className="space-y-2">
+      <label htmlFor={id} className="text-sm font-medium">
+        {label}
+      </label>
+      <select
+        id={id}
+        name={name}
+        required={required}
+        value={value}
+        onChange={onChange}
+        className="w-full px-4 py-3 rounded-lg border border-input bg-background"
+      >
+        <option value="">Select an option</option>
+        {options.map((opt) => (
+          <option key={opt} value={opt.toLowerCase().replace(/\s+/g, "-")}>
+            {opt}
+          </option>
+        ))}
+      </select>
+    </div>
+  );
+}
+
+function FormTextarea({
+  label,
+  id,
+  name,
+  required,
+  value,
+  onChange,
+  placeholder,
+}: {
+  label: string;
+  id: string;
+  name: string;
+  required?: boolean;
+  value: string | undefined;
+  onChange: React.ChangeEventHandler<HTMLTextAreaElement>;
+  placeholder?: string;
+}) {
+  return (
+    <div className="space-y-2">
+      <label htmlFor={id} className="text-sm font-medium">
+        {label}
+      </label>
+      <textarea
+        id={id}
+        name={name}
+        required={required}
+        value={value}
+        onChange={onChange}
+        rows={6}
+        className="w-full px-4 py-3 rounded-lg border border-input bg-background resize-none"
+        placeholder={placeholder}
+      />
+    </div>
+  );
+}
+
+function FAQItem({ q, a }: { q: string; a: string }) {
+  return (
+    <div className="space-y-3">
+      <h3 className="text-xl font-semibold">{q}</h3>
+      <p className="text-muted-foreground leading-relaxed">{a}</p>
+    </div>
   );
 }
