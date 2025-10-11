@@ -24,27 +24,27 @@ export const metadata: Metadata = {
     process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"
   ),
   title: {
-    default: "Surge Innovations - Your Tech Partner for Scalable Impact",
+    default: "Surge Innovations - Strategy, Code & Scalable Impact",
     template: "%s | Surge Innovations",
   },
   description:
     "We design and build custom digital platforms that simplify work, automate tasks, and give you clarity across your operations.",
-  generator: "v0.app",
+  generator: "Surge Innovations",
   icons: {
-    icon: "/favicon.ico",
-    shortcut: "/favicon.ico",
-    apple: "/surge-logo-favicon.ico",
+    icon: "/logo/surge logo (2).ico",
+    shortcut: "/logo/surge logo (2).ico",
+    apple: "/logo/surge logo (2).ico",
   },
   manifest: "/site.webmanifest",
   openGraph: {
-    title: "Surge Innovations - Your Tech Partner for Scalable Impact",
+    title: "Surge Innovations - Strategy, Code & Scalable Impact",
     description:
       "We design and build custom digital platforms that simplify work, automate tasks, and give you clarity across your operations.",
-    url: "https://surgeinnovations.com",
+    url: "https://surgeinnovations.org",
     siteName: "Surge Innovations",
     images: [
       {
-        url: "/surge-og-image.png",
+        url: "/logo/surge logo (2).ico",
         width: 1200,
         height: 630,
         alt: "Surge Innovations - Scalable Impact",
@@ -54,10 +54,10 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Surge Innovations - Your Tech Partner for Scalable Impact",
+    title: "Surge Innovations - Strategy, Code & Scalable Impact",
     description:
       "We design and build custom digital platforms that simplify work, automate tasks, and give you clarity across your operations.",
-    images: ["/surge-og-image.png"],
+    images: ["/logo/surge logo (2).ico"],
   },
 };
 
