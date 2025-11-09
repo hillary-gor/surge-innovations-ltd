@@ -71,8 +71,10 @@ export async function GET(request: Request) {
         switch (userRole) {
           case "admin":
             return redirect("/dashboard/admin");
-          case "vendor":
-            return redirect("/");
+          case "support":
+            return redirect("/dashboard/support");
+          case "finance":
+            return redirect("/dashboard/finance");
           case "client":
             return redirect("/");
           default:

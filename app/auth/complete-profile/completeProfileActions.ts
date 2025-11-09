@@ -76,7 +76,10 @@ export async function completeProfile(
   switch (upsertedProfile.role) {
     case "admin":
       return redirect("/dashboard/admin");
-    case "vendor":
+    case "support":
+      return redirect("/dashboard/support");
+    case "finance":
+      return redirect("/dashboard/finance");
     case "client":
     default:
       return redirect("/");

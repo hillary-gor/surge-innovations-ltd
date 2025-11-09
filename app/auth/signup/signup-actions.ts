@@ -22,9 +22,12 @@ export async function signup(formData: FormData) {
   });
 
   if (error) {
-    return redirect(`/auth/signup?message=${encodeURIComponent("Could not sign up user. Please try again.")}`);
+    return redirect(
+      `/auth/signup?message=${encodeURIComponent(
+        "You could not sign up. Please try again."
+      )}`
+    );
   }
-  
-  // Corrected redirection path to match your file structure
+
   return redirect("/auth/signin?message=check-email");
 }
