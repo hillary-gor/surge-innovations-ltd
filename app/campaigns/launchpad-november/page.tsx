@@ -18,7 +18,7 @@ import FloatingHeader from "@/components/floating-logo-&-close-button";
 import Image from "next/image";
 
 const heroImage =
-  "https://fmkjragqxbepihujxemw.supabase.co/storage/v1/object/public/assets/WhatsApp_Image_2025-11-08_at_22.59.10_627e4fa2-removebg-preview.png";
+  "/campaig-hero.jpg";
 
 const containerVariants = {
   hidden: { opacity: 0 },
