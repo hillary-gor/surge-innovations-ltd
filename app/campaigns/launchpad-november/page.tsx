@@ -182,7 +182,6 @@ export default function LaunchpadNovember() {
           </motion.div>
         </div>
       </section>
-
       {/* WHY FREE?*/}
       <section className="bg-black text-white py-20 px-6">
         <div className="max-w-4xl mx-auto text-center">
@@ -308,12 +307,12 @@ export default function LaunchpadNovember() {
 
             <div className="flex-1 w-full bg-white p-8 rounded-2xl shadow-xl border border-gray-200">
               <h3 className="text-sm font-bold text-gray-400 uppercase tracking-wider mb-6">
-                Your Monthly Running Costs
+                Your Annual Running Costs
               </h3>
 
               <div className="flex justify-between items-center mb-4 pb-4 border-b border-gray-100">
                 <span className="text-gray-700 font-medium">
-                  AWS Cloud Hosting
+                  AWS Cloud Hosting starting at
                 </span>
                 <span className="font-bold">
                   ~KES 3,500{" "}
@@ -323,10 +322,10 @@ export default function LaunchpadNovember() {
 
               <div className="flex justify-between items-center mb-4 pb-4 border-b border-gray-100">
                 <span className="text-gray-700 font-medium">
-                  Domain (.co.ke)
+                  Domain (.com)
                 </span>
                 <span className="font-bold">
-                  ~KES 1,500{" "}
+                  ~KES 2,000{" "}
                   <span className="text-xs text-gray-400 font-normal">/yr</span>
                 </span>
               </div>
@@ -334,7 +333,7 @@ export default function LaunchpadNovember() {
               <div className="bg-blue-50 p-4 rounded-lg mt-6">
                 <div className="flex justify-between items-center">
                   <span className="text-blue-900 font-bold">
-                    Total Payable to Us
+                    Total dev fees Payable to Us
                   </span>
                   <span className="text-3xl font-extrabold text-blue-600">
                     KES 0
@@ -349,25 +348,52 @@ export default function LaunchpadNovember() {
         </div>
       </section>
 
+      {/* WHO IS THIS FOR? */}
+<section className="py-20 px-6 bg-white">
+  <div className="max-w-3xl mx-auto">
+    <h3 className="text-2xl font-bold text-center mb-10">Is this for you?</h3>
+    <div className="space-y-4">
+      <div className="flex gap-4 items-start p-4 rounded-xl border border-gray-100 hover:bg-gray-50 transition">
+        <div className="bg-green-100 p-2 rounded-full shrink-0 mt-1">
+          <CheckCircle2 className="text-green-700 w-4 h-4" />
+        </div>
+        <div>
+          <h4 className="font-bold text-gray-900">Established Business or Serious Startup</h4>
+          <p className="text-gray-600 text-sm">You have a real product/service ready to sell. We are building businesses, not hobby sites.</p>
+        </div>
+      </div>
+       <div className="flex gap-4 items-start p-4 rounded-xl border border-gray-100 hover:bg-gray-50 transition">
+        <div className="bg-green-100 p-2 rounded-full shrink-0 mt-1">
+          <CheckCircle2 className="text-green-700 w-4 h-4" />
+        </div>
+        <div>
+          <h4 className="font-bold text-gray-900">Budget for Hosting</h4>
+          <p className="text-gray-600 text-sm">You are ready to pay AWS/Domain costs starting at (~KES 13,999/year) plus if you need extra storage</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
       {/* CTA - URGENCY */}
       <section className="py-24 px-6">
         <div className="max-w-4xl mx-auto text-center">
           <div className="inline-block p-3 bg-orange-100 text-orange-700 rounded-full mb-6 animate-pulse">
             <Clock className="w-5 h-5 inline mr-2" />
-            <strong>Deadline approaching:</strong> Campaign closes Nov 15th
+            <strong>Deadline approaching:</strong> Campaign closes December 24th
           </div>
           <h2 className="text-4xl md:text-6xl font-bold tracking-tight mb-6">
             Don&apos;t build from scratch. <br />
             Start at the finish line.
           </h2>
           <p className="text-xl text-gray-600 mb-10 max-w-2xl mx-auto">
-            Secure your slot. Get a KES 250k website for the price of hosting.
+            Secure your slot. Get a KES 250k platform(web app) for the price of hosting.
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-4">
             <Button
               asChild
               size="lg"
-              className="bg-black text-white hover:bg-gray-800 h-16 px-12 text-lg rounded-full shadow-2xl"
+              className="bg-black text-white hover:bg-gray-800 h-16 px-12 text-lg rounded-full shadow-2xl" 
             >
               <Link href="/contact">Apply Now - It takes 2 mins</Link>
             </Button>
