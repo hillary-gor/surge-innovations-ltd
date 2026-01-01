@@ -12,7 +12,7 @@ export function Footer() {
             <div className="flex flex-col items-center md:items-start gap-4 text-center md:text-left">
               <Image
                 src="/surge-logo.png"
-                alt="Surge Innovations"
+                alt="6care Logo"
                 width={150}
                 height={50}
                 className="h-10 w-auto"
