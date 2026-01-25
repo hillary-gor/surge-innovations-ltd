@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Navigation } from "@/components/navigation";
 import { Footer } from "@/components/footer";
 import { Button } from "@/components/ui/button";
@@ -16,70 +16,92 @@ import {
   X,
   Package,
   Star,
+  Globe,
+  ChevronDown,
+  Loader2,
 } from "lucide-react";
 import Link from "next/link";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+// Ensure this import path matches where you saved the component
+import {
+  PricingExplainerSection,
+  CURRENCIES,
+  PRICING_DATA,
+  type CurrencyCode,
+} from "../pricing-explainer-section";
 
-const PLANS = [
-  {
-    name: "Business Starter",
-    description: "Foundational infrastructure for Startups & SMEs",
-    price: "KES 16,000",
-    period: "/ year",
-    features: [
-      "High-Performance Next.js Hosting",
-      "1 GB Managed Cloud Storage",
-      "Free .co.ke/.com Domain Renewal",
-      "SSL Encryption & Basic Firewall",
-    ],
-    cta: "View Starter Details",
-    href: "/pricing/business-starter",
-    highlighted: false,
-    current: false,
-  },
-  {
-    name: "Business Premium",
-    description: "For growing companies needing automation & scale",
-    price: "KES 35,000",
-    period: "/ year",
-    features: [
-      "Priority Runtime (Unmetered Bandwidth)",
-      "25 GB High-Speed Object Storage",
-      "Daily Encrypted Backups (7-day retention)",
-      "Priority Email & WhatsApp Line",
-      "Same-Day Critical Response",
-    ],
-    cta: "Current Selection",
-    href: "#",
-    highlighted: true,
-    current: true,
-  },
-  {
-    name: "Corporate Platinum",
-    description: "Mission critical infrastructure for Enterprises",
-    price: "KES 85,000",
-    period: "/ year",
-    features: [
-      "Dedicated Environment (99.99% Uptime)",
-      "100 GB Enterprise Data Warehousing",
-      "Dedicated Technical Lead (Direct Phone)",
-      "< 4 Hours Critical Response Time",
-      "Annual Penetration Testing",
-    ],
-    cta: "View Corporate Details",
-    href: "/pricing/corporate-platinum",
-    highlighted: false,
-    current: false,
-  },
+const EURO_COUNTRIES = [
+  "DE", "FR", "IT", "ES", "NL", "BE", "AT", "IE", "FI", "PT", "GR",
 ];
 
 function PackageComparisonModal({
   isOpen,
   onClose,
+  currency,
 }: {
   isOpen: boolean;
   onClose: () => void;
+  currency: CurrencyCode;
 }) {
   if (!isOpen) return null;
+
+  const PLANS = [
+    {
+      name: "Business Starter",
+      description: "Foundational infrastructure for Startups & SMEs",
+      price: `${CURRENCIES[currency].symbol} ${PRICING_DATA.starter[currency]}`,
+      period: "/ year",
+      features: [
+        "High-Performance Next.js Hosting",
+        "1 GB Managed Cloud Storage",
+        "Free .co.ke/.com Domain Renewal",
+        "SSL Encryption & Basic Firewall",
+      ],
+      cta: "View Starter Details",
+      href: "/pricing/business-starter",
+      highlighted: false,
+      current: false,
+    },
+    {
+      name: "Business Premium",
+      description: "For growing companies needing automation & scale",
+      price: `${CURRENCIES[currency].symbol} ${PRICING_DATA.premium[currency]}`,
+      period: "/ year",
+      features: [
+        "Priority Runtime (Unmetered Bandwidth)",
+        "25 GB High-Speed Object Storage",
+        "Daily Encrypted Backups (7-day retention)",
+        "Priority Email & WhatsApp Line",
+        "Same-Day Critical Response",
+      ],
+      cta: "Current Selection",
+      href: "#",
+      highlighted: true,
+      current: true,
+    },
+    {
+      name: "Corporate Platinum",
+      description: "Mission critical infrastructure for Enterprises",
+      price: `${CURRENCIES[currency].symbol} ${PRICING_DATA.platinum[currency]}`,
+      period: "/ year",
+      features: [
+        "Dedicated Environment (99.99% Uptime)",
+        "100 GB Enterprise Data Warehousing",
+        "Dedicated Technical Lead (Direct Phone)",
+        "< 4 Hours Critical Response Time",
+        "Annual Penetration Testing",
+      ],
+      cta: "View Corporate Details",
+      href: "/pricing/corporate-platinum",
+      highlighted: false,
+      current: false,
+    },
+  ];
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6">
@@ -179,8 +201,40 @@ function PackageComparisonModal({
   );
 }
 
+// --- MAIN PAGE ---
 export default function BusinessPremiumPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [currency, setCurrency] = useState<CurrencyCode>("USD");
+  const [isLoadingLocation, setIsLoadingLocation] = useState(true);
+
+  // Automatic Location Detection
+  useEffect(() => {
+    const detectLocation = async () => {
+      try {
+        const response = await fetch("https://ipapi.co/json/");
+        const data = await response.json();
+        const countryCode = data.country_code;
+
+        if (countryCode === "KE") {
+          setCurrency("KES");
+        } else if (countryCode === "GB") {
+          setCurrency("GBP");
+        } else if (EURO_COUNTRIES.includes(countryCode)) {
+          setCurrency("EUR");
+        } else {
+          setCurrency("USD");
+        }
+      } catch (error) {
+        console.error("Failed to auto-detect location:", error);
+      } finally {
+        setIsLoadingLocation(false);
+      }
+    };
+
+    detectLocation();
+  }, []);
+
+  const symbol = CURRENCIES[currency].symbol;
 
   return (
     <>
@@ -188,9 +242,11 @@ export default function BusinessPremiumPage() {
       <PackageComparisonModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
+        currency={currency}
       />
 
       <main className="min-h-screen pt-16 overflow-x-hidden">
+        {/* Hero Section */}
         <section className="bg-gradient-to-b from-muted/50 to-background py-16 md:py-24 border-b border-border/50">
           <div className="mx-auto w-full max-w-6xl px-4 md:px-6 lg:px-8">
             <div className="flex flex-col md:flex-row justify-between items-start gap-12">
@@ -203,6 +259,18 @@ export default function BusinessPremiumPage() {
                   <span className="px-3 py-1 rounded-full bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-400 text-xs font-bold uppercase tracking-wider">
                     Cycle: Annual
                   </span>
+
+                  {/* Mobile Currency Indicator */}
+                  <div className="md:hidden">
+                    {isLoadingLocation ? (
+                      <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />
+                    ) : (
+                      <span className="text-xs text-muted-foreground flex items-center gap-1">
+                        <Globe className="h-3 w-3" />{" "}
+                        {CURRENCIES[currency].label}
+                      </span>
+                    )}
+                  </div>
                 </div>
                 <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight text-foreground">
                   Business <span className="text-primary">Premium</span> Tier
@@ -218,24 +286,68 @@ export default function BusinessPremiumPage() {
                 </div>
               </div>
 
+              {/* Pricing Card */}
               <div className="flex flex-col gap-4 w-full md:w-auto">
                 <div className="bg-card border border-border rounded-xl p-8 shadow-lg md:min-w-[340px] relative overflow-hidden">
                   <div className="absolute top-0 right-0 bg-primary text-primary-foreground text-xs font-bold px-3 py-1 rounded-bl-lg">
                     MOST POPULAR
                   </div>
-                  <p className="text-sm text-muted-foreground font-medium uppercase tracking-wide">
-                    Annual Investment
-                  </p>
-                  <div className="flex items-baseline gap-1 mt-4 mb-6">
+
+                  <div className="flex justify-between items-center mb-4 mt-2">
+                    <p className="text-sm text-muted-foreground font-medium uppercase tracking-wide">
+                      Annual Investment
+                    </p>
+
+                    {/* Currency Switcher */}
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="h-8 gap-1 px-2 text-xs text-muted-foreground"
+                        >
+                          {isLoadingLocation ? (
+                            <Loader2 className="h-3 w-3 animate-spin" />
+                          ) : (
+                            <>
+                              {CURRENCIES[currency].flag} {currency}{" "}
+                              <ChevronDown className="h-3 w-3" />
+                            </>
+                          )}
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end">
+                        {(Object.keys(CURRENCIES) as CurrencyCode[]).map(
+                          (code) => (
+                            <DropdownMenuItem
+                              key={code}
+                              onClick={() => setCurrency(code)}
+                            >
+                              <span className="mr-2">
+                                {CURRENCIES[code].flag}
+                              </span>{" "}
+                              {CURRENCIES[code].label}
+                            </DropdownMenuItem>
+                          )
+                        )}
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </div>
+
+                  <div className="flex items-baseline gap-1 mb-6">
                     <span className="text-5xl font-bold text-primary tracking-tight">
-                      KES 35k
+                      {symbol} {PRICING_DATA.premium[currency]}
                     </span>
                     <span className="text-muted-foreground font-medium">
                       / year
                     </span>
                   </div>
                   <div className="space-y-4">
-                    <Button className="w-full h-12 text-base" size="lg" asChild>
+                    <Button
+                      className="w-full h-12 text-base"
+                      size="lg"
+                      asChild
+                    >
                       <Link href="/contact">Activate Premium</Link>
                     </Button>
                     <p className="text-xs text-center text-muted-foreground bg-muted/50 py-2 rounded">
@@ -265,6 +377,10 @@ export default function BusinessPremiumPage() {
           </div>
         </section>
 
+        {/* Pricing Explainer Section - FIXED TIER HERE */}
+        <PricingExplainerSection tier="premium" currency={currency} />
+
+        {/* Valuation Table */}
         <section className="py-16 md:py-24">
           <div className="mx-auto w-full max-w-5xl px-4 md:px-6 lg:px-8">
             <div className="space-y-8">
@@ -302,10 +418,10 @@ export default function BusinessPremiumPage() {
                         </span>
                       </td>
                       <td className="p-4 md:p-5 text-muted-foreground line-through decoration-red-500/50 decoration-2 text-right hidden md:table-cell">
-                        KES 120,000
+                        {symbol} {PRICING_DATA.val_premium_dev[currency]}
                       </td>
                       <td className="p-4 md:p-5 text-right font-bold text-green-600 bg-green-50/10">
-                        KES 0.00
+                        {symbol} 0.00
                       </td>
                     </tr>
                     <tr className="bg-card hover:bg-muted/20 transition-colors">
@@ -315,10 +431,10 @@ export default function BusinessPremiumPage() {
                         </span>
                       </td>
                       <td className="p-4 md:p-5 text-muted-foreground line-through decoration-red-500/50 decoration-2 text-right hidden md:table-cell">
-                        KES 25,000
+                        {symbol} {PRICING_DATA.val_setup[currency]}
                       </td>
                       <td className="p-4 md:p-5 text-right font-bold text-green-600 bg-green-50/10">
-                        KES 0.00
+                        {symbol} 0.00
                       </td>
                     </tr>
                     <tr className="bg-card hover:bg-muted/20 transition-colors">
@@ -328,10 +444,10 @@ export default function BusinessPremiumPage() {
                         </span>
                       </td>
                       <td className="p-4 md:p-5 text-muted-foreground text-right hidden md:table-cell">
-                        KES 35,000
+                        {symbol} {PRICING_DATA.premium[currency]}
                       </td>
                       <td className="p-4 md:p-5 text-right font-bold bg-primary/5">
-                        KES 35,000
+                        {symbol} {PRICING_DATA.premium[currency]}
                       </td>
                     </tr>
                     <tr className="bg-foreground text-background">
@@ -339,10 +455,10 @@ export default function BusinessPremiumPage() {
                         TOTAL DUE
                       </td>
                       <td className="p-4 md:p-5 text-muted-foreground/50 line-through text-right hidden md:table-cell">
-                        KES 180,000
+                        {symbol} {PRICING_DATA.val_premium_total[currency]}
                       </td>
                       <td className="p-4 md:p-5 text-right font-bold text-xl text-primary-foreground">
-                        KES 35,000
+                        {symbol} {PRICING_DATA.premium[currency]}
                       </td>
                     </tr>
                   </tbody>
@@ -352,6 +468,7 @@ export default function BusinessPremiumPage() {
           </div>
         </section>
 
+        {/* Detailed Inclusions (Static Content) */}
         <section className="py-24 bg-muted/20">
           <div className="mx-auto w-full max-w-5xl px-4 md:px-6 lg:px-8">
             <h2 className="text-3xl font-bold mb-12 text-center md:text-left">
@@ -446,7 +563,7 @@ export default function BusinessPremiumPage() {
                   </div>
                   <div className="flex-1 bg-blue-50/50 dark:bg-blue-900/10 p-6 rounded-xl border border-blue-100 dark:border-blue-900/20 text-sm text-blue-900 dark:text-blue-100 leading-relaxed">
                     <p className="font-semibold mb-3 flex items-center gap-2">
-                      <Info className="h-4 w-4" /> Why 25 GB?
+                      <Info className="h-4 w-4" /> Note on Capacity:
                     </p>
                     "25GB allows for the storage of approximately 250,000 PDF
                     documents or 10,000 high-resolution images. This is ideal
@@ -497,14 +614,14 @@ export default function BusinessPremiumPage() {
           </div>
         </section>
 
+        {/* Cost Transparency */}
         <section className="py-24">
           <div className="mx-auto w-full max-w-5xl px-4 md:px-6 lg:px-8">
             <h2 className="text-2xl font-bold mb-6">
               Transparent Cost Breakdown
             </h2>
             <p className="text-muted-foreground mb-8 max-w-2xl">
-              We believe in full transparency. Here is how your KES 35,000
-              investment is utilized:
+              We believe in full transparency. Here is how your {symbol} {PRICING_DATA.premium[currency]} investment is utilized:
             </p>
 
             <div className="border border-border rounded-lg overflow-hidden">
@@ -518,27 +635,27 @@ export default function BusinessPremiumPage() {
                   {
                     name: "Priority Compute",
                     desc: "Enhanced CPU & RAM Allocation",
-                    cost: "KES 15,000",
+                    cost: `${symbol} ${PRICING_DATA.bd_compute[currency]}`,
                   },
                   {
                     name: "Cloud Storage",
                     desc: "25GB High-Availability Storage",
-                    cost: "KES 10,000",
+                    cost: `${symbol} ${PRICING_DATA.bd_storage_prem[currency]}`,
                   },
                   {
                     name: "Domain & SSL",
                     desc: "Registry Fees & Security Certificates",
-                    cost: "KES 3,000",
+                    cost: `${symbol} ${PRICING_DATA.bd_domain_prem[currency]}`,
                   },
                   {
                     name: "Backup Systems",
                     desc: "Automated Daily Snapshots & Retention",
-                    cost: "KES 4,000",
+                    cost: `${symbol} ${PRICING_DATA.bd_backup[currency]}`,
                   },
                   {
                     name: "Support SLA",
                     desc: "Priority Support Access",
-                    cost: "KES 3,000",
+                    cost: `${symbol} ${PRICING_DATA.bd_support[currency]}`,
                   },
                 ].map((item, i) => (
                   <div key={i} className="grid grid-cols-12 p-4 items-center">
@@ -556,7 +673,7 @@ export default function BusinessPremiumPage() {
                 <div className="grid grid-cols-12 p-4 bg-primary/5 font-bold">
                   <div className="col-span-9">TOTAL ANNUAL FEE</div>
                   <div className="col-span-3 text-right text-primary text-base">
-                    KES 35,000
+                    {symbol} {PRICING_DATA.premium[currency]}
                   </div>
                 </div>
               </div>
@@ -564,6 +681,7 @@ export default function BusinessPremiumPage() {
           </div>
         </section>
 
+        {/* Critical Terms */}
         <section className="py-24 bg-muted/30">
           <div className="mx-auto w-full max-w-5xl px-4 md:px-6 lg:px-8">
             <div className="flex items-center gap-3 mb-8">
@@ -584,8 +702,7 @@ export default function BusinessPremiumPage() {
                   suspends the instance.
                 </p>
                 <div className="bg-amber-50 dark:bg-amber-950/30 p-3 rounded border-l-4 border-amber-500 text-xs italic text-amber-800 dark:text-amber-200">
-                  "If service is suspended due to non-payment, a KES 2,500
-                  Reinstatement Fee will be charged to re-deploy the server and
+                  "If service is suspended due to non-payment, a {symbol} {PRICING_DATA.fee_reinstatement[currency]} Reinstatement Fee will be charged to re-deploy the server and
                   restore data from cold storage."
                 </div>
               </div>
@@ -618,6 +735,7 @@ export default function BusinessPremiumPage() {
           </div>
         </section>
 
+        {/* CTA */}
         <section className="py-24">
           <div className="mx-auto w-full max-w-3xl px-4 text-center">
             <h2 className="text-3xl font-bold mb-4">Ready to upgrade?</h2>

@@ -1,29 +1,249 @@
+"use client";
+
+import React, { useState, useEffect } from "react";
 import { Navigation } from "@/components/navigation";
 import { Footer } from "@/components/footer";
 import { Button } from "@/components/ui/button";
-import { 
-  Check, 
-  Cpu, 
-  HardDrive, 
-  Users, 
-  ShieldAlert, 
-  AlertTriangle, 
+import {
+  Check,
+  Cpu,
+  HardDrive,
+  Users,
+  ShieldAlert,
+  AlertTriangle,
   FileCheck,
   Building2,
   PhoneCall,
-  ArrowRight
+  ArrowRight,
+  X,
+  Globe,
+  ChevronDown,
+  Loader2,
 } from "lucide-react";
 import Link from "next/link";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
+  PricingExplainerSection,
+  CURRENCIES,
+  PRICING_DATA,
+  type CurrencyCode,
+} from "../pricing-explainer-section";
+
+const EURO_COUNTRIES = ["DE", "FR", "IT", "ES", "NL", "BE", "AT", "IE", "FI", "PT", "GR"];
+
+function PackageComparisonModal({
+  isOpen,
+  onClose,
+  currency,
+}: {
+  isOpen: boolean;
+  onClose: () => void;
+  currency: CurrencyCode;
+}) {
+  if (!isOpen) return null;
+
+  const PLANS = [
+    {
+      name: "Business Starter",
+      description: "Foundational infrastructure for Startups & SMEs",
+      price: `${CURRENCIES[currency].symbol} ${PRICING_DATA.starter[currency]}`,
+      period: "/ year",
+      features: [
+        "High-Performance Next.js Hosting",
+        "1 GB Managed Cloud Storage",
+        "Free .co.ke/.com Domain Renewal",
+        "SSL Encryption & Basic Firewall",
+      ],
+      cta: "View Starter Details",
+      href: "/pricing/business-starter",
+      highlighted: false,
+      current: false,
+    },
+    {
+      name: "Business Premium",
+      description: "For growing companies needing automation & scale",
+      price: `${CURRENCIES[currency].symbol} ${PRICING_DATA.premium[currency]}`,
+      period: "/ year",
+      features: [
+        "Priority Runtime (Unmetered Bandwidth)",
+        "25 GB High-Speed Object Storage",
+        "Daily Encrypted Backups (7-day retention)",
+        "Priority Email & WhatsApp Line",
+        "Same-Day Critical Response",
+      ],
+      cta: "View Premium Details",
+      href: "/pricing/business-premium",
+      highlighted: false,
+      current: false,
+    },
+    {
+      name: "Corporate Platinum",
+      description: "Mission critical infrastructure for Enterprises",
+      price: `${CURRENCIES[currency].symbol} ${PRICING_DATA.platinum[currency]}`,
+      period: "/ year",
+      features: [
+        "Dedicated Environment (99.99% Uptime)",
+        "100 GB Enterprise Data Warehousing",
+        "Dedicated Technical Lead (Direct Phone)",
+        "< 4 Hours Critical Response Time",
+        "Annual Penetration Testing",
+      ],
+      cta: "Current Selection",
+      href: "#",
+      highlighted: true,
+      current: true,
+    },
+  ];
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6">
+      <div
+        className="absolute inset-0 bg-background/80 backdrop-blur-sm transition-opacity"
+        onClick={onClose}
+      />
+      <div className="relative w-full max-w-6xl bg-card border border-border rounded-xl shadow-2xl max-h-[90vh] overflow-y-auto flex flex-col animate-in fade-in zoom-in-95 duration-200">
+        <div className="sticky top-0 z-10 flex items-center justify-between px-6 py-4 border-b border-border bg-card/95 backdrop-blur">
+          <div>
+            <h2 className="text-lg font-bold">Compare Packages</h2>
+            <p className="text-sm text-muted-foreground">
+              Find the right infrastructure for your stage of growth.
+            </p>
+          </div>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={onClose}
+            className="rounded-full"
+          >
+            <X className="h-5 w-5" />
+          </Button>
+        </div>
+
+        <div className="p-6 grid grid-cols-1 md:grid-cols-3 gap-6">
+          {PLANS.map((plan, index) => (
+            <div
+              key={index}
+              className={`relative flex flex-col p-6 rounded-xl border ${
+                plan.highlighted
+                  ? "border-primary bg-primary/5 shadow-md"
+                  : plan.current
+                  ? "border-green-500/50 bg-green-500/5"
+                  : "border-border bg-card"
+              }`}
+            >
+              {plan.highlighted && !plan.current && (
+                <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full bg-primary text-primary-foreground text-xs font-medium">
+                  Recommended
+                </div>
+              )}
+              {plan.current && (
+                <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full bg-green-600 text-white text-xs font-medium">
+                  Viewing Now
+                </div>
+              )}
+
+              <div className="mb-6 space-y-2">
+                <h3 className="text-xl font-bold">{plan.name}</h3>
+                <p className="text-sm text-muted-foreground min-h-[40px]">
+                  {plan.description}
+                </p>
+              </div>
+
+              <div className="mb-6">
+                <div className="flex items-baseline gap-1">
+                  <span className="text-3xl font-bold">{plan.price}</span>
+                  <span className="text-muted-foreground text-sm">
+                    {plan.period}
+                  </span>
+                </div>
+              </div>
+
+              <ul className="space-y-3 mb-8 flex-1">
+                {plan.features.map((feature, idx) => (
+                  <li key={idx} className="flex items-start gap-2.5 text-sm">
+                    <Check className="h-4 w-4 text-primary shrink-0 mt-0.5" />
+                    <span className="text-muted-foreground">{feature}</span>
+                  </li>
+                ))}
+              </ul>
+
+              <Button
+                variant={
+                  plan.current
+                    ? "outline"
+                    : plan.highlighted
+                    ? "default"
+                    : "secondary"
+                }
+                className="w-full"
+                asChild={!plan.current}
+                disabled={plan.current}
+              >
+                {plan.current ? (
+                  <span>Selected</span>
+                ) : (
+                  <Link href={plan.href}>{plan.cta}</Link>
+                )}
+              </Button>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export default function CorporatePlatinumPage() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [currency, setCurrency] = useState<CurrencyCode>("USD");
+  const [isLoadingLocation, setIsLoadingLocation] = useState(true);
+
+  useEffect(() => {
+    const detectLocation = async () => {
+      try {
+        const response = await fetch("https://ipapi.co/json/");
+        const data = await response.json();
+        const countryCode = data.country_code;
+
+        if (countryCode === "KE") {
+          setCurrency("KES");
+        } else if (countryCode === "GB") {
+          setCurrency("GBP");
+        } else if (EURO_COUNTRIES.includes(countryCode)) {
+          setCurrency("EUR");
+        } else {
+          setCurrency("USD");
+        }
+      } catch (error) {
+        console.error("Failed to auto-detect location:", error);
+      } finally {
+        setIsLoadingLocation(false);
+      }
+    };
+
+    detectLocation();
+  }, []);
+
+  const symbol = CURRENCIES[currency].symbol;
+
   return (
     <>
       <Navigation />
+      <PackageComparisonModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        currency={currency}
+      />
+
       <main className="min-h-screen pt-16 overflow-x-hidden">
         
         {/* Header / Hero */}
         <section className="bg-slate-950 text-white py-16 md:py-24 border-b border-white/10 relative overflow-hidden">
-          {/* Abstract Enterprise Background */}
           <div className="absolute inset-0 opacity-20">
             <div className="absolute right-0 top-0 h-[500px] w-[500px] bg-blue-600 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/2"></div>
             <div className="absolute left-0 bottom-0 h-[300px] w-[300px] bg-purple-600 rounded-full blur-[100px] translate-y-1/2 -translate-x-1/2"></div>
@@ -39,6 +259,16 @@ export default function CorporatePlatinumPage() {
                   <span className="px-3 py-1 rounded-full bg-white/10 text-slate-200 border border-white/10 text-xs font-bold uppercase tracking-wider">
                     Cycle: Annual
                   </span>
+                  
+                  <div className="md:hidden">
+                     {isLoadingLocation ? (
+                        <Loader2 className="h-4 w-4 animate-spin text-slate-400" />
+                      ) : (
+                        <span className="text-xs text-slate-400 flex items-center gap-1">
+                           <Globe className="h-3 w-3" /> {CURRENCIES[currency].label}
+                        </span>
+                      )}
+                  </div>
                 </div>
                 <h1 className="text-4xl md:text-5xl font-bold tracking-tight text-white">
                   Corporate Platinum Tier
@@ -52,12 +282,41 @@ export default function CorporatePlatinumPage() {
                 </div>
               </div>
               
-              {/* Pricing Card */}
               <div className="bg-slate-900 border border-slate-700 rounded-xl p-6 shadow-2xl min-w-[300px] relative overflow-hidden">
                 <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-bl from-white/10 to-transparent"></div>
-                <p className="text-sm text-slate-400 font-medium">Annual Investment</p>
+                
+                <div className="flex justify-between items-center mb-2">
+                    <p className="text-sm text-slate-400 font-medium">Annual Investment</p>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant="outline" size="sm" className="h-8 gap-1 px-2 text-xs border-slate-700 bg-slate-800 text-slate-300 hover:bg-slate-700 hover:text-white">
+                          {isLoadingLocation ? (
+                             <Loader2 className="h-3 w-3 animate-spin" />
+                          ) : (
+                             <>
+                              {CURRENCIES[currency].flag} {currency} <ChevronDown className="h-3 w-3" />
+                             </>
+                          )}
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end" className="bg-slate-900 border-slate-700 text-slate-200">
+                        {(Object.keys(CURRENCIES) as CurrencyCode[]).map((code) => (
+                          <DropdownMenuItem 
+                            key={code} 
+                            onClick={() => setCurrency(code)}
+                            className="focus:bg-slate-800 focus:text-white cursor-pointer"
+                          >
+                            <span className="mr-2">{CURRENCIES[code].flag}</span> {CURRENCIES[code].label}
+                          </DropdownMenuItem>
+                        ))}
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                </div>
+
                 <div className="flex items-baseline gap-1 mt-2">
-                  <span className="text-4xl font-bold text-white">KES 85,000</span>
+                  <span className="text-4xl font-bold text-white">
+                    {symbol} {PRICING_DATA.platinum[currency]}
+                  </span>
                   <span className="text-slate-400">/ yr</span>
                 </div>
                 <div className="mt-4 space-y-3">
@@ -72,6 +331,9 @@ export default function CorporatePlatinumPage() {
             </div>
           </div>
         </section>
+
+        {/* Pricing Explainer Section */}
+        <PricingExplainerSection tier="platinum" currency={currency} />
 
         {/* Valuation Table */}
         <section className="py-16">
@@ -99,23 +361,39 @@ export default function CorporatePlatinumPage() {
                         Enterprise App Development
                         <span className="block text-xs text-muted-foreground font-normal mt-1">Full Stack Custom Build</span>
                       </td>
-                      <td className="p-4 text-muted-foreground line-through decoration-red-500 decoration-2 hidden md:table-cell">KES 250,000</td>
-                      <td className="p-4 text-right font-bold text-green-600">KES 0.00</td>
+                      <td className="p-4 text-muted-foreground line-through decoration-red-500 decoration-2 hidden md:table-cell">
+                        {symbol} {PRICING_DATA.val_platinum_dev[currency]}
+                      </td>
+                      <td className="p-4 text-right font-bold text-green-600">
+                        {symbol} 0.00
+                      </td>
                     </tr>
                     <tr className="bg-card">
                       <td className="p-4 font-medium">Server Architecture & Database Setup</td>
-                      <td className="p-4 text-muted-foreground line-through decoration-red-500 decoration-2 hidden md:table-cell">KES 45,000</td>
-                      <td className="p-4 text-right font-bold text-green-600">KES 0.00</td>
+                      <td className="p-4 text-muted-foreground line-through decoration-red-500 decoration-2 hidden md:table-cell">
+                        {symbol} {PRICING_DATA.val_platinum_arch[currency]}
+                      </td>
+                      <td className="p-4 text-right font-bold text-green-600">
+                        {symbol} 0.00
+                      </td>
                     </tr>
                     <tr className="bg-card">
                       <td className="p-4 font-medium">Annual Enterprise Infrastructure Fee</td>
-                      <td className="p-4 text-muted-foreground hidden md:table-cell">KES 85,000</td>
-                      <td className="p-4 text-right font-bold">KES 85,000</td>
+                      <td className="p-4 text-muted-foreground hidden md:table-cell">
+                        {symbol} {PRICING_DATA.platinum[currency]}
+                      </td>
+                      <td className="p-4 text-right font-bold">
+                        {symbol} {PRICING_DATA.platinum[currency]}
+                      </td>
                     </tr>
                     <tr className="bg-slate-900 text-white border-t-2 border-slate-900">
                       <td className="p-4 font-bold text-lg">TOTAL DUE</td>
-                      <td className="p-4 text-slate-400 line-through hidden md:table-cell">KES 380,000</td>
-                      <td className="p-4 text-right font-bold text-xl">KES 85,000</td>
+                      <td className="p-4 text-slate-400 line-through hidden md:table-cell">
+                        {symbol} {PRICING_DATA.val_platinum_total[currency]}
+                      </td>
+                      <td className="p-4 text-right font-bold text-xl">
+                        {symbol} {PRICING_DATA.platinum[currency]}
+                      </td>
                     </tr>
                   </tbody>
                 </table>
@@ -127,7 +405,7 @@ export default function CorporatePlatinumPage() {
           </div>
         </section>
 
-        {/* Detailed Inclusions */}
+        {/* Detailed Inclusions (Static Content) */}
         <section className="py-16 bg-muted/20">
           <div className="mx-auto w-full max-w-5xl px-4 md:px-6 lg:px-8">
             <h2 className="text-3xl font-bold mb-12">Detailed Service Inclusions</h2>
@@ -223,7 +501,7 @@ export default function CorporatePlatinumPage() {
           <div className="mx-auto w-full max-w-5xl px-4 md:px-6 lg:px-8">
             <h2 className="text-2xl font-bold mb-6">Transparent Cost Breakdown</h2>
             <p className="text-muted-foreground mb-8 max-w-2xl">
-              How your KES 85,000 investment is utilized for mission-critical operations:
+              How your {symbol} {PRICING_DATA.platinum[currency]} investment is utilized for mission-critical operations:
             </p>
             
             <div className="border border-border rounded-lg overflow-hidden">
@@ -234,11 +512,11 @@ export default function CorporatePlatinumPage() {
               </div>
               <div className="divide-y divide-border text-sm">
                 {[
-                  { name: "Dedicated Resources", desc: "High-availability server environment", cost: "KES 25,000" },
-                  { name: "Enterprise Storage", desc: "100GB Redundant Cloud Storage", cost: "KES 30,000" },
-                  { name: "Security & Compliance", desc: "Pen-testing, SSL, Audit Logging", cost: "KES 10,000" },
-                  { name: "Support Retainer", desc: "Priority SLAs & Monthly Content Updates", cost: "KES 15,000" },
-                  { name: "Admin & Domain", desc: "Registry Fees & Account Management", cost: "KES 5,000" },
+                  { name: "Dedicated Resources", desc: "High-availability server environment", cost: `${symbol} ${PRICING_DATA.bd_resources[currency]}` },
+                  { name: "Enterprise Storage", desc: "100GB Redundant Cloud Storage", cost: `${symbol} ${PRICING_DATA.bd_storage_plat[currency]}` },
+                  { name: "Security & Compliance", desc: "Pen-testing, SSL, Audit Logging", cost: `${symbol} ${PRICING_DATA.bd_security_plat[currency]}` },
+                  { name: "Support Retainer", desc: "Priority SLAs & Monthly Content Updates", cost: `${symbol} ${PRICING_DATA.bd_support_plat[currency]}` },
+                  { name: "Admin & Domain", desc: "Registry Fees & Account Management", cost: `${symbol} ${PRICING_DATA.bd_admin_plat[currency]}` },
                 ].map((item, i) => (
                   <div key={i} className="grid grid-cols-12 p-4 items-center">
                     <div className="col-span-4 md:col-span-3 font-medium">{item.name}</div>
@@ -248,7 +526,7 @@ export default function CorporatePlatinumPage() {
                 ))}
                 <div className="grid grid-cols-12 p-4 bg-slate-900 text-white font-bold">
                   <div className="col-span-9">TOTAL</div>
-                  <div className="col-span-3 text-right">KES 85,000</div>
+                  <div className="col-span-3 text-right">{symbol} {PRICING_DATA.platinum[currency]}</div>
                 </div>
               </div>
             </div>
@@ -271,7 +549,7 @@ export default function CorporatePlatinumPage() {
                   Service continuity is automated. If the annual renewal fee is not received by the due date, the system automatically suspends the instance.
                 </p>
                 <div className="bg-muted/50 p-3 rounded border-l-4 border-amber-500 text-xs italic text-muted-foreground">
-                  "If service is suspended due to non-payment, a KES 2,500 Reinstatement Fee will be charged to re-deploy the server and restore data from cold storage."
+                  "If service is suspended due to non-payment, a {symbol} {PRICING_DATA.fee_reinstatement[currency]} Reinstatement Fee will be charged to re-deploy the server and restore data from cold storage."
                 </div>
               </div>
 
@@ -311,8 +589,13 @@ export default function CorporatePlatinumPage() {
               <Button size="lg" className="h-12 px-8 bg-slate-900 text-white hover:bg-slate-800" asChild>
                 <Link href="/contact">Book Strategy Call <ArrowRight className="ml-2 h-4 w-4"/></Link>
               </Button>
-              <Button size="lg" variant="outline" className="h-12 px-8" asChild>
-                <Link href="/pricing">Compare Other Plans</Link>
+              <Button 
+                size="lg" 
+                variant="outline" 
+                className="h-12 px-8" 
+                onClick={() => setIsModalOpen(true)}
+              >
+                Compare Other Plans
               </Button>
             </div>
           </div>
