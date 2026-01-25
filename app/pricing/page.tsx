@@ -1,59 +1,63 @@
 import { Navigation } from "@/components/navigation";
 import { Footer } from "@/components/footer";
 import { Button } from "@/components/ui/button";
-import { Check } from "lucide-react";
+import { Check, Info } from "lucide-react";
 import Link from "next/link";
 
 export default function PricingPage() {
   const plans = [
     {
-      name: "Starter",
-      description: "Perfect for small projects and MVPs",
-      price: "Custom",
+      name: "Business Starter",
+      description: "Foundational infrastructure for Startups & SMEs",
+      price: "KES 16,000", 
+      period: "/ year",
       features: [
-        "Custom web application",
-        "Responsive design",
-        "Basic integrations",
-        "Cloud hosting setup",
-        "3 months support",
-        "Documentation",
+        "High-Performance Next.js Hosting",
+        "1 GB Managed Cloud Storage",
+        "Free .co.ke/.com Domain Renewal",
+        "SSL Encryption & Basic Firewall",
+        "Daily Database Backups",
+        "Quarterly Security Patching",
+        "Email Support (48hr Resolution)",
       ],
-      cta: "Get Started",
+      cta: "See Package Details",
+      href: "/pricing/business-starter",
       highlighted: false,
     },
     {
-      name: "Professional",
-      description: "Ideal for growing organizations",
-      price: "Custom",
+      name: "Business Premium",
+      description: "For growing companies needing automation & scale",
+      price: "KES 35,000",
+      period: "/ year",
       features: [
         "Everything in Starter",
-        "Advanced integrations",
-        "Custom workflows",
-        "User authentication",
-        "Analytics dashboard",
-        "6 months support",
-        "Priority support",
-        "Training sessions",
+        "Priority Runtime (Unmetered Bandwidth)",
+        "25 GB High-Speed Object Storage",
+        "Daily Encrypted Backups (7-day retention)",
+        "Priority Email & WhatsApp Line",
+        "Same-Day Critical Response",
+        "Quarterly Deep-Dive Health Check",
       ],
-      cta: "Get Started",
+      cta: "See Package Details",
+      href: "/pricing/business-premium",
       highlighted: true,
     },
     {
-      name: "Enterprise",
-      description: "For large-scale operations",
-      price: "Custom",
+      name: "Corporate Platinum",
+      description: "Mission critical infrastructure for Enterprises",
+      price: "KES 85,000",
+      period: "/ year",
       features: [
-        "Everything in Professional",
-        "Multi-tenant architecture",
-        "Advanced security",
-        "Custom integrations",
-        "Dedicated support team",
-        "12 months support",
-        "SLA guarantee",
-        "On-site training",
-        "White-label options",
+        "Everything in Premium",
+        "Dedicated Environment (99.99% Uptime)",
+        "100 GB Enterprise Data Warehousing",
+        "Dedicated Technical Lead (Direct Phone)",
+        "< 4 Hours Critical Response Time",
+        "Annual Penetration Testing",
+        "Monthly Content Updates (2 hrs included)",
       ],
-      cta: "Contact Sales",
+      cta: "See Package Details",
+      href: "/pricing/corporate-platinum",
       highlighted: false,
     },
   ];
@@ -91,8 +95,9 @@ export default function PricingPage() {
                 Transparent <span className="text-primary">Pricing</span>
               </h1>
               <p className="text-xl text-muted-foreground text-balance leading-relaxed">
-                Every project is unique. We provide custom quotes based on your
-                specific needs, timeline, and scope.
+                We waive the heavy development fees in exchange for a long-term
+                partnership. Access a full engineering pod for a fraction of the
+                cost of hiring.
               </p>
             </div>
           </div>
@@ -109,38 +114,45 @@ export default function PricingPage() {
                     plan.highlighted
                       ? "border-primary bg-primary/5 shadow-lg scale-105"
                       : "border-border bg-card"
-                  } space-y-6 transition-all`}
+                  } space-y-6 transition-all flex flex-col`}
                 >
                   {plan.highlighted && (
-                    <div className="inline-block px-3 py-1 rounded-full bg-primary text-primary-foreground text-sm font-medium">
+                    <div className="inline-block px-3 py-1 rounded-full bg-primary text-primary-foreground text-sm font-medium w-fit">
                       Most Popular
                     </div>
                   )}
                   <div className="space-y-2">
                     <h3 className="text-2xl font-bold">{plan.name}</h3>
-                    <p className="text-muted-foreground">{plan.description}</p>
-                  </div>
-                  <div className="space-y-1">
-                    <div className="text-4xl font-bold">{plan.price}</div>
-                    <p className="text-sm text-muted-foreground">
-                      Based on project scope
+                    <p className="text-muted-foreground text-sm h-12">
+                      {plan.description}
                     </p>
                   </div>
-                  <ul className="space-y-3">
+                  <div className="space-y-1">
+                    <div className="flex items-baseline gap-1">
+                      <span className="text-4xl font-bold">{plan.price}</span>
+                      <span className="text-muted-foreground text-sm font-medium">
+                        {plan.period}
+                      </span>
+                    </div>
+                    <p className="text-xs text-muted-foreground">
+                      Development Fee Waived (Subsidy Applied)
+                    </p>
+                  </div>
+                  <ul className="space-y-3 flex-grow">
                     {plan.features.map((feature, idx) => (
                       <li key={idx} className="flex items-start gap-3">
                         <Check className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
-                        <span className="text-sm">{feature}</span>
+                        <span className="text-sm leading-tight">{feature}</span>
                       </li>
                     ))}
                   </ul>
                   <Button
-                    className="w-full"
+                    className="w-full mt-6"
                     variant={plan.highlighted ? "default" : "outline"}
                     size="lg"
                     asChild
                   >
-                    <Link href="/contact">{plan.cta}</Link>
+                    <Link href={plan.href}>{plan.cta}</Link>
                   </Button>
                 </div>
               ))}
@@ -175,41 +187,40 @@ export default function PricingPage() {
           </div>
         </section>
 
-        {/* FAQ */}
+        {/* FAQ - Updated with Terms from Documents */}
         <section className="py-24">
           <div className="mx-auto w-full max-w-7xl px-4 md:px-6 lg:px-8">
             <div className="max-w-3xl mx-auto space-y-12">
               <div className="text-center space-y-4">
                 <h2 className="text-3xl md:text-4xl font-bold">
-                  Frequently Asked Questions
+                  Critical Terms & FAQ
                 </h2>
               </div>
               <div className="space-y-8">
                 {[
                   {
-                    q: "Why don’t you list fixed prices?",
-                    a:
-                      "Every project is unique with different requirements, complexity, and timelines. We provide detailed custom quotes after understanding your needs to ensure fair pricing.",
+                    q: "Why is the development fee waived?",
+                    a: "We operate on a 'Strategic Partnership' model. Instead of charging huge upfront fees (e.g., KES 85k-250k), we invest in your build and recover costs through the annual infrastructure license.",
                   },
                   {
-                    q: "What’s included in the support period?",
-                    a:
-                      "Support includes bug fixes, minor updates, technical assistance, and monitoring. Major new features are quoted separately.",
+                    q: "What happens if I miss a renewal payment?",
+                    a: "Service continuity is automated. If payment is not received by the due date, the system automatically suspends the instance. A KES 2,500 Reinstatement Fee applies to re-deploy the server.", // [cite: 289, 333, 378]
                   },
                   {
-                    q: "Do you offer payment plans?",
-                    a:
-                      "Yes, we offer milestone-based payments — typically 30% upfront, 40% mid-project, and 30% upon completion.",
+                    q: "Who owns the data?",
+                    a: "You do. Upon full payment of the annual fee, the Client retains 100% ownership of all customer data, database records, and uploaded files. We claim no IP rights over your business data.", // [cite: 291, 336, 381]
                   },
                   {
-                    q: "What happens after project completion?",
-                    a:
-                      "You own all code and assets. We hand over documentation, training, and offer ongoing support options if needed.",
+                    q: "Can I upgrade my storage later?",
+                    a: "Yes. You can move from the Starter Tier (1GB) to Premium (25GB) at any time. We simply prorate the difference in the annual fee to upgrade your capacity instantly.", // [cite: 367]
                   },
                 ].map((item, i) => (
-                  <div key={i} className="space-y-3">
-                    <h3 className="text-xl font-semibold">{item.q}</h3>
-                    <p className="text-muted-foreground leading-relaxed">
+                  <div key={i} className="space-y-3 bg-card p-6 rounded-lg border border-border/50">
+                    <h3 className="text-xl font-semibold flex items-center gap-2">
+                      <Info className="h-5 w-5 text-primary" />
+                      {item.q}
+                    </h3>
+                    <p className="text-muted-foreground leading-relaxed pl-7">
                       {item.a}
                     </p>
                   </div>
