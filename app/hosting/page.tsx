@@ -80,7 +80,7 @@ export default function HostingPlans() {
   return (
     <div className="min-h-screen bg-white text-gray-900 font-sans selection:bg-orange-100 selection:text-orange-900 relative overflow-x-hidden">
       {/* BACKGROUND GRID */}
-      <div className="absolute inset-0 h-full w-full bg-white bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px] -z-10"></div>
+      <div className="absolute inset-0 h-full w-full bg-white bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-size-[24px_24px] -z-10"></div>
 
       <FloatingHeader />
 
@@ -102,7 +102,7 @@ export default function HostingPlans() {
           className="text-5xl md:text-7xl font-bold tracking-tighter text-gray-950 mb-6 leading-[1.1]"
         >
           Don&apos;t pay for development. <br />
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-gray-500 to-gray-900">
+          <span className="text-transparent bg-clip-text bg-linear-to-r from-gray-500 to-gray-900">
             Just pay for hosting.
           </span>
         </motion.h1>

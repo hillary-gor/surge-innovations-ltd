@@ -132,7 +132,7 @@ export default function ResourcesPage() {
                     <ArrowRight className="ml-2 h-5 w-5" />
                   </Button>
                 </div>
-                <div className="relative rounded-lg overflow-hidden aspect-[16/9] border border-border">
+                <div className="relative rounded-lg overflow-hidden aspect-video border border-border">
                   <Image
                     src="/digital-transformation.png"
                     alt="Featured article"
@@ -162,7 +162,7 @@ export default function ResourcesPage() {
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {articles.map((article, index) => (
                   <article key={index} className="group space-y-4">
-                    <div className="relative rounded-lg overflow-hidden border border-border aspect-[16/9]">
+                    <div className="relative rounded-lg overflow-hidden border border-border aspect-video">
                       <Image
                         src={article.image || "/placeholder.svg"}
                         alt={article.title}

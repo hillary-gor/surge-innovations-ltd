@@ -29,7 +29,7 @@ import {
 import {PricingExplainerSection} from "../pricing-explainer-section";
 // Cast to a generic React component type so we can pass props even if the imported component
 // does not have explicit prop typings exported.
-const PricingExplainerSectionAny = (PricingExplainerSection as unknown) as React.ComponentType<any>;
+const PricingExplainerSectionAny = (PricingExplainerSection as unknown) as React.ComponentType<Record<string, unknown>>;
 
 // --- CONFIGURATION & DATA ---
 type CurrencyCode = "USD" | "KES" | "GBP" | "EUR";
@@ -183,7 +183,7 @@ function PackageComparisonModal({
 
               <div className="mb-6 space-y-2">
                 <h3 className="text-xl font-bold">{plan.name}</h3>
-                <p className="text-sm text-muted-foreground min-h-[40px]">
+                <p className="text-sm text-muted-foreground min-h-10">
                   {plan.description}
                 </p>
               </div>
@@ -238,12 +238,26 @@ export default function BusinessStarterPage() {
   const [currency, setCurrency] = useState<CurrencyCode>("USD");
   const [isLoadingLocation, setIsLoadingLocation] = useState(true);
 
-  // Automatic Location Detection
+ // Automatic Location Detection
   useEffect(() => {
+    // 1. Create an abort controller
+    const controller = new AbortController();
+    const signal = controller.signal;
+
     const detectLocation = async () => {
       try {
-        const response = await fetch("https://ipapi.co/json/");
+        // 2. Pass the signal to fetch
+        const response = await fetch("https://ipapi.co/json/", { signal });
+        
+        if (!response.ok) {
+           throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
         const data = await response.json();
+        
+        // 3. Prevent state updates if component is unmounted
+        if (signal.aborted) return;
+
         const countryCode = data.country_code;
 
         if (countryCode === "KE") {
@@ -255,14 +269,24 @@ export default function BusinessStarterPage() {
         } else {
           setCurrency("USD");
         }
-      } catch (error) {
+      } catch (error: unknown) {
+        // 4. Ignore errors caused by navigating away
+        if (error instanceof Error && error.name === "AbortError") return;
         console.error("Failed to auto-detect location:", error);
       } finally {
-        setIsLoadingLocation(false);
+        // 5. Only update loading state if still mounted
+        if (!signal.aborted) {
+          setIsLoadingLocation(false);
+        }
       }
     };
 
     detectLocation();
+
+    // 6. Cleanup function runs when you leave the page
+    return () => {
+      controller.abort();
+    };
   }, []);
 
   const symbol = CURRENCIES[currency].symbol;
@@ -278,7 +302,7 @@ export default function BusinessStarterPage() {
 
       <main className="min-h-screen pt-16 overflow-x-hidden">
         {/* Header / Hero */}
-        <section className="bg-gradient-to-b from-muted/50 to-background py-16 md:py-24 border-b border-border/50">
+        <section className="bg-linear-to-b from-muted/50 to-background py-16 md:py-24 border-b border-border/50">
           <div className="mx-auto w-full max-w-6xl px-4 md:px-6 lg:px-8">
             <div className="flex flex-col md:flex-row justify-between items-start gap-12">
               <div className="space-y-6 max-w-2xl">
@@ -318,7 +342,7 @@ export default function BusinessStarterPage() {
 
               {/* Pricing Card */}
               <div className="flex flex-col gap-4 w-full md:w-auto">
-                <div className="bg-card border border-border rounded-xl p-8 shadow-lg md:min-w-[340px]">
+                <div className="bg-card border border-border rounded-xl p-8 shadow-lg md:min-w-85">
                   <div className="flex justify-between items-center mb-4">
                      <p className="text-sm text-muted-foreground font-medium uppercase tracking-wide">
                         Annual Investment
@@ -357,12 +381,17 @@ export default function BusinessStarterPage() {
                   </div>
                   <div className="space-y-4">
                     <Button className="w-full h-12 text-base" size="lg" asChild>
-                      <Link href="/contact">Get Started</Link>
+                        {/* WE UPDATE THIS LINK TO PASS DATA */}
+                        <Link 
+                        href={`/contact?plan=Business+Starter&price=${PRICING_DATA.starter[currency].replace(/,/g, '')}&billing=Annual&currency=${currency}`}
+                        >
+                        Get Started
+                        </Link>
                     </Button>
                     <p className="text-xs text-center text-muted-foreground bg-muted/50 py-2 rounded">
-                      Includes 100% Development Subsidy
+                        Includes 100% Development Subsidy
                     </p>
-                  </div>
+                    </div>
                 </div>
 
                 <button
@@ -587,11 +616,11 @@ export default function BusinessStarterPage() {
                     <p className="font-semibold mb-3 flex items-center gap-2">
                       <Info className="h-4 w-4" /> Note on Capacity:
                     </p>
-                    "For most starters, 1GB is plenty for invoices and profile
+                    &quot;For most starters, 1GB is plenty for invoices and profile
                     photos. Since this is a high-speed cloud tier (not just a
-                    hard drive), it's expensive to maintain. If you ever fill it
+                    hard drive), it&apos;s expensive to maintain. If you ever fill it
                     up, we can instantly upgrade you to the Business Tier
-                    without downtime."
+                    without downtime.&quot;
                   </div>
                 </div>
               </div>
@@ -725,8 +754,8 @@ export default function BusinessStarterPage() {
                   suspends the instance.
                 </p>
                 <div className="bg-amber-50 dark:bg-amber-950/30 p-3 rounded border-l-4 border-amber-500 text-xs italic text-amber-800 dark:text-amber-200">
-                  "If service is suspended due to non-payment, a {symbol} {PRICING_DATA.fee_reinstatement[currency]} Reinstatement Fee will be charged to re-deploy the server and
-                  restore data from cold storage."
+                  &quot;If service is suspended due to non-payment, a {symbol} {PRICING_DATA.fee_reinstatement[currency]} Reinstatement Fee will be charged to re-deploy the server and
+                  restore data from cold storage.&quot;
                 </div>
               </div>
 
@@ -739,9 +768,9 @@ export default function BusinessStarterPage() {
                   tool, and you own what you put inside it.
                 </p>
                 <div className="bg-green-50 dark:bg-green-950/30 p-3 rounded border-l-4 border-green-500 text-xs italic text-green-800 dark:text-green-200">
-                  "Upon full payment of the annual fee, the Client retains 100%
+                  &quot;Upon full payment of the annual fee, the Client retains 100%
                   ownership of all customer data... The Provider (Us) claims no
-                  intellectual property rights."
+                  intellectual property rights.&quot;
                 </div>
               </div>
 

@@ -25,7 +25,7 @@ export default function TechAsAServicePage() {
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <section className="relative py-20 px-4 bg-gradient-to-br from-primary/5 via-background to-accent/5">
+      <section className="relative py-20 px-4 bg-linear-to-br from-primary/5 via-background to-accent/5">
         <div className="max-w-5xl mx-auto text-center">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium mb-6">
             <Zap className="h-4 w-4" />
@@ -119,28 +119,28 @@ export default function TechAsAServicePage() {
               </p>
               <ul className="space-y-3">
                 <li className="flex items-start gap-3">
-                  <Check className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
+                  <Check className="h-5 w-5 text-primary mt-0.5 shrink-0" />
                   <span>
                     <strong>Full-Stack Developer(s)</strong> - Build your
                     frontend and backend systems
                   </span>
                 </li>
                 <li className="flex items-start gap-3">
-                  <Check className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
+                  <Check className="h-5 w-5 text-primary mt-0.5 shrink-0" />
                   <span>
                     <strong>UI/UX Designer</strong> - Create beautiful,
                     user-friendly interfaces
                   </span>
                 </li>
                 <li className="flex items-start gap-3">
-                  <Check className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
+                  <Check className="h-5 w-5 text-primary mt-0.5 shrink-0" />
                   <span>
                     <strong>Product Manager</strong> - Coordinate timelines and
                     requirements
                   </span>
                 </li>
                 <li className="flex items-start gap-3">
-                  <Check className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
+                  <Check className="h-5 w-5 text-primary mt-0.5 shrink-0" />
                   <span>
                     <strong>QA/DevOps Engineer</strong> - Ensure quality,
                     deployment, and monitoring
@@ -275,7 +275,7 @@ export default function TechAsAServicePage() {
           </h2>
           <div className="grid md:grid-cols-2 gap-6">
             <div className="flex items-start gap-3">
-              <Check className="h-6 w-6 text-primary mt-1 flex-shrink-0" />
+              <Check className="h-6 w-6 text-primary mt-1 shrink-0" />
               <div>
                 <h3 className="font-semibold mb-1">
                   Product Strategy & Planning
@@ -286,7 +286,7 @@ export default function TechAsAServicePage() {
               </div>
             </div>
             <div className="flex items-start gap-3">
-              <Check className="h-6 w-6 text-primary mt-1 flex-shrink-0" />
+              <Check className="h-6 w-6 text-primary mt-1 shrink-0" />
               <div>
                 <h3 className="font-semibold mb-1">UI/UX Design</h3>
                 <p className="text-sm text-muted-foreground">
@@ -296,7 +296,7 @@ export default function TechAsAServicePage() {
               </div>
             </div>
             <div className="flex items-start gap-3">
-              <Check className="h-6 w-6 text-primary mt-1 flex-shrink-0" />
+              <Check className="h-6 w-6 text-primary mt-1 shrink-0" />
               <div>
                 <h3 className="font-semibold mb-1">Full-Stack Development</h3>
                 <p className="text-sm text-muted-foreground">
@@ -305,7 +305,7 @@ export default function TechAsAServicePage() {
               </div>
             </div>
             <div className="flex items-start gap-3">
-              <Check className="h-6 w-6 text-primary mt-1 flex-shrink-0" />
+              <Check className="h-6 w-6 text-primary mt-1 shrink-0" />
               <div>
                 <h3 className="font-semibold mb-1">Cloud Infrastructure</h3>
                 <p className="text-sm text-muted-foreground">
@@ -314,7 +314,7 @@ export default function TechAsAServicePage() {
               </div>
             </div>
             <div className="flex items-start gap-3">
-              <Check className="h-6 w-6 text-primary mt-1 flex-shrink-0" />
+              <Check className="h-6 w-6 text-primary mt-1 shrink-0" />
               <div>
                 <h3 className="font-semibold mb-1">Quality Assurance</h3>
                 <p className="text-sm text-muted-foreground">
@@ -323,7 +323,7 @@ export default function TechAsAServicePage() {
               </div>
             </div>
             <div className="flex items-start gap-3">
-              <Check className="h-6 w-6 text-primary mt-1 flex-shrink-0" />
+              <Check className="h-6 w-6 text-primary mt-1 shrink-0" />
               <div>
                 <h3 className="font-semibold mb-1">Ongoing Support</h3>
                 <p className="text-sm text-muted-foreground">
@@ -332,7 +332,7 @@ export default function TechAsAServicePage() {
               </div>
             </div>
             <div className="flex items-start gap-3">
-              <Check className="h-6 w-6 text-primary mt-1 flex-shrink-0" />
+              <Check className="h-6 w-6 text-primary mt-1 shrink-0" />
               <div>
                 <h3 className="font-semibold mb-1">Fractional CTO Services</h3>
                 <p className="text-sm text-muted-foreground">
@@ -341,7 +341,7 @@ export default function TechAsAServicePage() {
               </div>
             </div>
             <div className="flex items-start gap-3">
-              <Check className="h-6 w-6 text-primary mt-1 flex-shrink-0" />
+              <Check className="h-6 w-6 text-primary mt-1 shrink-0" />
               <div>
                 <h3 className="font-semibold mb-1">Systems Integration</h3>
                 <p className="text-sm text-muted-foreground">

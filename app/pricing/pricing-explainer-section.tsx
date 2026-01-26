@@ -143,7 +143,7 @@ export function PricingExplainerSection({
           <div className="flex-1 space-y-6">
             <div className="space-y-2">
               <h3 className="text-2xl font-bold tracking-tight">
-                It's not just a subscription. <br /> It's a Partnership.
+                It&apos;s not just a subscription. <br /> It&apos;s a Partnership.
               </h3>
               <p className="text-muted-foreground leading-relaxed">
                 Most agencies charge you a huge upfront fee (e.g.,{" "}
@@ -228,7 +228,7 @@ export function PricingExplainerSection({
           <div className="bg-muted/50 p-4 border-b border-border">
             <h4 className="font-bold text-base flex items-center gap-2">
               <Calculator className="h-4 w-4 text-primary" />
-              The "Hiring vs. Partnering" Math
+              The &quot;Hiring vs. Partnering&quot; Math
             </h4>
           </div>
           <div className="grid md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-border">

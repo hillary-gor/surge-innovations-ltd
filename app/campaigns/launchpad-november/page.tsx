@@ -37,7 +37,7 @@ export default function LaunchpadNovember() {
   return (
     <div className="min-h-screen bg-white text-gray-900 font-sans selection:bg-orange-100 selection:text-orange-900 relative overflow-x-hidden">
       {/* BACKGROUND GRID */}
-      <div className="absolute inset-0 h-full w-full bg-white bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px] -z-10"></div>
+      <div className="absolute inset-0 h-full w-full bg-white bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-size-[24px_24px] -z-10"></div>
 
       <FloatingHeader />
 
@@ -161,7 +161,7 @@ export default function LaunchpadNovember() {
                     <Cloud size={14} className="text-orange-500" /> AWS Cloud
                   </p>
                 </div>
-                <div className="h-8 w-[1px] bg-gray-200"></div>
+                <div className="h-8 w-px bg-gray-200"></div>
                 <div>
                   <p className="text-xs text-gray-500 font-bold uppercase">
                     Performance
@@ -170,7 +170,7 @@ export default function LaunchpadNovember() {
                     <Zap size={14} className="text-green-500" /> 99/100
                   </p>
                 </div>
-                <div className="h-8 w-[1px] bg-gray-200"></div>
+                <div className="h-8 w-px bg-gray-200"></div>
                 <div>
                   <p className="text-xs text-gray-500 font-bold uppercase">
                     Region

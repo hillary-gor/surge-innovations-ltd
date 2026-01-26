@@ -150,7 +150,7 @@ export default function CaseStudiesPage() {
                             key={idx}
                             className="flex items-start gap-2 text-muted-foreground"
                           >
-                            <ArrowRight className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
+                            <ArrowRight className="h-5 w-5 text-primary shrink-0 mt-0.5" />
                             <span>{result}</span>
                           </li>
                         ))}
@@ -181,7 +181,7 @@ export default function CaseStudiesPage() {
                     )}
                   </div>
                   <div className={index % 2 === 1 ? "md:order-1" : ""}>
-                    <div className="relative rounded-lg overflow-hidden border border-border shadow-lg aspect-[16/9]">
+                    <div className="relative rounded-lg overflow-hidden border border-border shadow-lg aspect-video">
                       <Image
                         src={study.image || "/placeholder.svg"}
                         alt={study.title}

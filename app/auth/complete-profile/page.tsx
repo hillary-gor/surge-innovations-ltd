@@ -156,7 +156,7 @@ export default function CompleteProfilePage() {
       <div className="w-full max-w-lg relative z-10">
         <Card className="glass-card shadow-2xl border-0 slide-in">
           <CardHeader className="space-y-1 pb-6 text-center">
-            <CardTitle className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent">
+            <CardTitle className="text-2xl font-bold bg-linear-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent">
               Complete Your Profile
             </CardTitle>
             <CardDescription className="text-gray-600">
@@ -203,11 +203,11 @@ export default function CompleteProfilePage() {
                   role="alert"
                 >
                   {message.type === "error" ? (
-                    <AlertCircle className="h-5 w-5 flex-shrink-0" />
+                    <AlertCircle className="h-5 w-5 shrink-0" />
                   ) : (
-                    <CheckCircle className="h-5 w-5 flex-shrink-0" />
+                    <CheckCircle className="h-5 w-5 shrink-0" />
                   )}
-                  <span className="flex-grow text-center">{message.text}</span>
+                  <span className="grow text-center">{message.text}</span>
                 </div>
               )}
 

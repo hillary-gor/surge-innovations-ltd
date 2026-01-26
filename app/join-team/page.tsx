@@ -17,7 +17,7 @@ export default function JoinTeamPage() {
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <section className="relative py-20 px-4 bg-gradient-to-br from-primary/5 via-background to-accent/5">
+      <section className="relative py-20 px-4 bg-linear-to-br from-primary/5 via-background to-accent/5">
         <div className="max-w-4xl mx-auto text-center">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium mb-6">
             <Heart className="h-4 w-4" />

@@ -163,7 +163,7 @@ export default function PricingPage() {
       <Navigation />
       <main className="min-h-screen pt-16 overflow-x-hidden">
         {/* Hero Section */}
-        <section className="py-24 md:py-32 bg-gradient-to-b from-muted/30 to-background">
+        <section className="py-24 md:py-32 bg-linear-to-b from-muted/30 to-background">
           <div className="mx-auto w-full max-w-7xl px-4 md:px-6 lg:px-8">
             <div className="max-w-3xl mx-auto text-center space-y-8">
               <div className="space-y-4">
@@ -185,7 +185,7 @@ export default function PricingPage() {
                       <Button
                         variant="outline"
                         size="lg"
-                        className="gap-2 rounded-full border-primary/20 bg-background hover:bg-muted/50 transition-all shadow-sm min-w-[200px] justify-between"
+                        className="gap-2 rounded-full border-primary/20 bg-background hover:bg-muted/50 transition-all shadow-sm min-w-50 justify-between"
                       >
                         {isLoadingLocation ? (
                           <div className="flex items-center gap-2">
@@ -280,10 +280,10 @@ export default function PricingPage() {
                     </p>
                   </div>
                   <div className="w-full h-px bg-border/50" />
-                  <ul className="space-y-4 flex-grow">
+                  <ul className="space-y-4 grow">
                     {plan.features.map((feature, idx) => (
                       <li key={idx} className="flex items-start gap-3 text-sm">
-                        <Check className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
+                        <Check className="h-5 w-5 text-primary shrink-0 mt-0.5" />
                         <span className="leading-tight text-muted-foreground">
                           {feature}
                         </span>

@@ -152,7 +152,7 @@ function PackageComparisonModal({
 
               <div className="mb-6 space-y-2">
                 <h3 className="text-xl font-bold">{plan.name}</h3>
-                <p className="text-sm text-muted-foreground min-h-[40px]">
+                <p className="text-sm text-muted-foreground min-h-10">
                   {plan.description}
                 </p>
               </div>
@@ -207,12 +207,21 @@ export default function BusinessPremiumPage() {
   const [currency, setCurrency] = useState<CurrencyCode>("USD");
   const [isLoadingLocation, setIsLoadingLocation] = useState(true);
 
-  // Automatic Location Detection
+  // Automatic Location Detection (Fixed with AbortController)
   useEffect(() => {
+    const controller = new AbortController();
+    const signal = controller.signal;
+
     const detectLocation = async () => {
       try {
-        const response = await fetch("https://ipapi.co/json/");
+        const response = await fetch("https://ipapi.co/json/", { signal });
+        
+        if (!response.ok) throw new Error("Location fetch failed");
+        
         const data = await response.json();
+        
+        if (signal.aborted) return;
+
         const countryCode = data.country_code;
 
         if (countryCode === "KE") {
@@ -224,14 +233,17 @@ export default function BusinessPremiumPage() {
         } else {
           setCurrency("USD");
         }
-      } catch (error) {
+      } catch (error: unknown) {
+        if (error instanceof Error && error.name === "AbortError") return;
         console.error("Failed to auto-detect location:", error);
       } finally {
-        setIsLoadingLocation(false);
+        if (!signal.aborted) setIsLoadingLocation(false);
       }
     };
 
     detectLocation();
+
+    return () => controller.abort();
   }, []);
 
   const symbol = CURRENCIES[currency].symbol;
@@ -247,7 +259,7 @@ export default function BusinessPremiumPage() {
 
       <main className="min-h-screen pt-16 overflow-x-hidden">
         {/* Hero Section */}
-        <section className="bg-gradient-to-b from-muted/50 to-background py-16 md:py-24 border-b border-border/50">
+        <section className="bg-linear-to-b from-muted/50 to-background py-16 md:py-24 border-b border-border/50">
           <div className="mx-auto w-full max-w-6xl px-4 md:px-6 lg:px-8">
             <div className="flex flex-col md:flex-row justify-between items-start gap-12">
               <div className="space-y-6 max-w-2xl">
@@ -288,7 +300,7 @@ export default function BusinessPremiumPage() {
 
               {/* Pricing Card */}
               <div className="flex flex-col gap-4 w-full md:w-auto">
-                <div className="bg-card border border-border rounded-xl p-8 shadow-lg md:min-w-[340px] relative overflow-hidden">
+                <div className="bg-card border border-border rounded-xl p-8 shadow-lg md:min-w-85 relative overflow-hidden">
                   <div className="absolute top-0 right-0 bg-primary text-primary-foreground text-xs font-bold px-3 py-1 rounded-bl-lg">
                     MOST POPULAR
                   </div>
@@ -348,7 +360,12 @@ export default function BusinessPremiumPage() {
                       size="lg"
                       asChild
                     >
-                      <Link href="/contact">Activate Premium</Link>
+                      {/* FIX 1: Pass Plan Data */}
+                      <Link 
+                        href={`/contact?plan=Business+Premium&price=${PRICING_DATA.premium[currency].replace(/,/g, '')}&billing=Annual&currency=${currency}`}
+                      >
+                        Activate Premium
+                      </Link>
                     </Button>
                     <p className="text-xs text-center text-muted-foreground bg-muted/50 py-2 rounded">
                       Includes 100% Development Subsidy
@@ -377,7 +394,7 @@ export default function BusinessPremiumPage() {
           </div>
         </section>
 
-        {/* Pricing Explainer Section - FIXED TIER HERE */}
+        {/* Pricing Explainer Section */}
         <PricingExplainerSection tier="premium" currency={currency} />
 
         {/* Valuation Table */}
@@ -565,10 +582,10 @@ export default function BusinessPremiumPage() {
                     <p className="font-semibold mb-3 flex items-center gap-2">
                       <Info className="h-4 w-4" /> Note on Capacity:
                     </p>
-                    "25GB allows for the storage of approximately 250,000 PDF
+                    &quot;25GB allows for the storage of approximately 250,000 PDF
                     documents or 10,000 high-resolution images. This is ideal
                     for businesses moving from physical filing cabinets to
-                    digital operations."
+                    digital operations.&quot;
                   </div>
                 </div>
               </div>
@@ -702,8 +719,8 @@ export default function BusinessPremiumPage() {
                   suspends the instance.
                 </p>
                 <div className="bg-amber-50 dark:bg-amber-950/30 p-3 rounded border-l-4 border-amber-500 text-xs italic text-amber-800 dark:text-amber-200">
-                  "If service is suspended due to non-payment, a {symbol} {PRICING_DATA.fee_reinstatement[currency]} Reinstatement Fee will be charged to re-deploy the server and
-                  restore data from cold storage."
+                  &quot;If service is suspended due to non-payment, a {symbol} {PRICING_DATA.fee_reinstatement[currency]} Reinstatement Fee will be charged to re-deploy the server and
+                  restore data from cold storage.&quot;
                 </div>
               </div>
 
@@ -716,9 +733,9 @@ export default function BusinessPremiumPage() {
                   tool, and you own what you put inside it.
                 </p>
                 <div className="bg-green-50 dark:bg-green-950/30 p-3 rounded border-l-4 border-green-500 text-xs italic text-green-800 dark:text-green-200">
-                  "Upon full payment of the annual fee, the Client retains 100%
+                  &quot;Upon full payment of the annual fee, the Client retains 100%
                   ownership of all customer data... The Provider (Us) claims no
-                  intellectual property rights."
+                  intellectual property rights.&quot;
                 </div>
               </div>
 
@@ -744,7 +761,10 @@ export default function BusinessPremiumPage() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
               <Button size="lg" className="h-12 px-8 w-full sm:w-auto" asChild>
-                <Link href="/contact">
+                {/* FIX 2: Pass Plan Data */}
+                <Link 
+                  href={`/contact?plan=Business+Premium&price=${PRICING_DATA.premium[currency].replace(/,/g, '')}&billing=Annual&currency=${currency}`}
+                >
                   Activate Premium License{" "}
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>

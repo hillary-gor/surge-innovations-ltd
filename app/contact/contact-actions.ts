@@ -10,6 +10,11 @@ export async function submitContactForm(formData: {
   projectType: string;
   budget?: string;
   message: string;
+  // New Fields
+  selectedPlan?: string;
+  planPrice?: string;
+  billingCycle?: string;
+  requestType?: string;
 }) {
   const supabase = await createClient();
 
@@ -22,6 +27,10 @@ export async function submitContactForm(formData: {
       project_type: formData.projectType,
       budget: formData.budget,
       message: formData.message,
+      selected_plan: formData.selectedPlan,
+      plan_price: formData.planPrice,
+      billing_cycle: formData.billingCycle,
+      request_type: formData.requestType || 'general',
     },
   ]);
 
