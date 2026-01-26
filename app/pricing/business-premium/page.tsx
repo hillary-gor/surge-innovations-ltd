@@ -34,6 +34,7 @@ import {
   PRICING_DATA,
   type CurrencyCode,
 } from "../pricing-explainer-section";
+import { PremiumScope } from "../components/pricing/scopes/PremiumScope";
 
 const EURO_COUNTRIES = [
   "DE", "FR", "IT", "ES", "NL", "BE", "AT", "IE", "FI", "PT", "GR",
@@ -396,6 +397,11 @@ export default function BusinessPremiumPage() {
 
         {/* Pricing Explainer Section */}
         <PricingExplainerSection tier="premium" currency={currency} />
+
+        {/* Scope of Services */}
+        <section className="bg-background">
+           <PremiumScope />
+        </section>
 
         {/* Valuation Table */}
         <section className="py-16 md:py-24">

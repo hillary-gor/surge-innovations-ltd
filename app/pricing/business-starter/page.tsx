@@ -27,6 +27,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import {PricingExplainerSection} from "../pricing-explainer-section";
+import { StarterScope } from "../components/pricing/scopes/StarterScope";
 // Cast to a generic React component type so we can pass props even if the imported component
 // does not have explicit prop typings exported.
 const PricingExplainerSectionAny = (PricingExplainerSection as unknown) as React.ComponentType<Record<string, unknown>>;
@@ -417,6 +418,11 @@ export default function BusinessStarterPage() {
 
         {/* Pricing Explainer Section */}
         <PricingExplainerSectionAny tier="starter" currency={currency} />
+
+        {/* Scope of Services */}
+        <section className="bg-background">
+           <StarterScope />
+        </section>
 
         {/* Valuation Table */}
         <section className="py-16 md:py-24">

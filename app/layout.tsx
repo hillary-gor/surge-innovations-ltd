@@ -1,11 +1,14 @@
 import type React from "react";
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter, Roboto_Mono } from "next/font/google";
 import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Suspense } from "react";
 import "./globals.css";
 import { FloatingCTA } from "@/components/floating-cta";
 import { Toaster } from "sonner";
+import NextTopLoader from "nextjs-toploader";
+import { ThemeProvider } from "@/components/theme-provider";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -19,6 +22,13 @@ const robotoMono = Roboto_Mono({
   display: "swap",
 });
 
+export const viewport: Viewport = {
+  themeColor: "#000000",
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+};
+
 export const metadata: Metadata = {
   metadataBase: new URL(
     process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"
@@ -29,7 +39,23 @@ export const metadata: Metadata = {
   },
   description:
     "We design and build custom digital platforms that simplify work, automate tasks, and give you clarity across your operations.",
-  generator: "Surge Innovations",
+  
+  // Added Keywords for SEO
+  keywords: [
+    "Digital Transformation",
+    "Custom Software Development",
+    "Business Automation",
+    "Scalable Platforms",
+    "Next.js Development",
+    "Surge Innovations",
+    "Operational Clarity",
+    "Strategy and Code",
+  ],
+  
+  authors: [{ name: "Surge Innovations" }],
+  creator: "Surge Innovations Ltd",
+  generator: "Surge",
+  
   icons: {
     icon: "/logo/surge logo (2).ico",
     shortcut: "/logo/surge logo (2).ico",
@@ -67,16 +93,43 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
-        className={`font-sans ${inter.variable} ${robotoMono.variable} antialiased`}
+        className={`font-sans ${inter.variable} ${robotoMono.variable} antialiased min-h-screen flex flex-col`}
       >
-        <Suspense fallback={null}>
-          <main>{children}</main>
-        </Suspense>
-        <FloatingCTA />
-        <Analytics />
-        <Toaster richColors position="top-right" />
+        {/* Navigation Loader */}
+        <NextTopLoader
+          color="#2563eb"
+          initialPosition={0.08}
+          crawlSpeed={200}
+          height={3}
+          crawl={true}
+          showSpinner={false}
+          easing="ease"
+          speed={200}
+          shadow="0 0 10px #2563eb,0 0 5px #2563eb"
+          zIndex={1600}
+        />
+
+        {/* Theme Provider for Dark/Light mode support */}
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <Suspense fallback={null}>
+            <main className="flex-1">{children}</main>
+          </Suspense>
+          
+          <FloatingCTA />
+          
+          {/* Vercel Analytics & Insights */}
+          <Analytics />
+          <SpeedInsights />
+          
+          <Toaster richColors position="top-right" />
+        </ThemeProvider>
       </body>
     </html>
   );

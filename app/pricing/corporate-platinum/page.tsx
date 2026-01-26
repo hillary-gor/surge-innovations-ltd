@@ -33,6 +33,7 @@ import {
   PRICING_DATA,
   type CurrencyCode,
 } from "../pricing-explainer-section";
+import { PlatinumScope } from "../components/pricing/scopes/PlatinumScope";
 
 const EURO_COUNTRIES = [
   "DE", "FR", "IT", "ES", "NL", "BE", "AT", "IE", "FI", "PT", "GR",
@@ -386,8 +387,13 @@ export default function CorporatePlatinumPage() {
           </div>
         </section>
 
+        {/* Scope of Services */}
+        <PlatinumScope />
+
+        {/* Pricing Explainer Section */}
         <PricingExplainerSection tier="platinum" currency={currency} />
 
+        {/* Valuation Table */}
         <section className="py-16 md:py-24">
           <div className="mx-auto w-full max-w-5xl px-4 md:px-6 lg:px-8">
             <div className="space-y-8">
