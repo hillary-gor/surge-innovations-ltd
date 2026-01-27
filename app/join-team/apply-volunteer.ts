@@ -2,7 +2,9 @@
 
 import { createClient } from "@/utils/supabase/server";
 import { revalidatePath } from "next/cache";
-import { volunteerSchema } from "@/lib/schemas/volunteer-schema"; // Import the shared schema
+import { volunteerSchema } from "@/lib/schemas/volunteer-schema";
+import { transporter } from "@/lib/nodemailer";
+import { generateVolunteerAckEmail } from "@/lib/emails/volunteer-ack";
 
 export async function submitVolunteerApplication(formData: FormData) {
   const supabase = await createClient();
@@ -13,16 +15,12 @@ export async function submitVolunteerApplication(formData: FormData) {
     return { success: false, error: "You must be signed in to apply." };
   }
 
-  // 2. Parse & Validate Data using SHARED SCHEMA
+  // 2. Parse & Validate Data
   const rawData = Object.fromEntries(formData.entries());
-  
-  // Handle Checkbox "on" logic for FormData
   if (!rawData.terms) rawData.terms = ""; 
-
+  
   const validation = volunteerSchema.safeParse(rawData);
-
   if (!validation.success) {
-    // Return the first error message found for simplicity, or generic
     return { success: false, error: "Validation failed. Please check your inputs." };
   }
 
@@ -42,7 +40,6 @@ export async function submitVolunteerApplication(formData: FormData) {
     portfolio_url: data.portfolioUrl || null,
     weekly_availability: data.weeklyAvailability,
     motivation: data.motivation,
-    // previousProjects is not in our Zod schema yet, if you added it, map it here
   });
 
   if (dbError) {
@@ -50,6 +47,25 @@ export async function submitVolunteerApplication(formData: FormData) {
     return { success: false, error: "Failed to submit application. Please try again." };
   }
 
+  try {
+    await transporter.sendMail({
+      from: '"Surge Careers" <admin@surgeinnovations.org>',
+      to: data.email,
+      subject: `Application Received: ${data.firstName} ${data.lastName}`,
+      html: generateVolunteerAckEmail(data.firstName, data.experienceLevel),
+    });
+
+    await transporter.sendMail({
+      from: '"Surge System" <admin@surgeinnovations.org>',
+      to: "info@surgeinnovations.org",
+      subject: `[NEW VOLUNTEER] ${data.firstName} - ${data.experienceLevel}`,
+      text: `New application from ${data.firstName} ${data.lastName}.\nSkills: ${data.technicalSkills}\nMotivation: ${data.motivation}`,
+    });
+
+  } catch (emailError) {
+    console.error("Failed to send email:", emailError);
+  }
+
   revalidatePath("/join-team");
-  return { success: true, message: "Application submitted successfully!" };
+  return { success: true, message: "Application submitted! Check your email for next steps." };
 }

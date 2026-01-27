@@ -1,7 +1,7 @@
-import transporter from "../nodemailer";
+import { transporter } from "../nodemailer";
 
 const SENDER = `"Surge Innovations" <${process.env.EMAIL_FROM}>`;
-const ADMIN_EMAIL = process.env.EMAIL_ADMIN || "admin@surgeinnovations.org"; // Where alerts go
+const ADMIN_EMAIL = process.env.EMAIL_ADMIN || "info@surgeinnovations.org"; // Where alerts go
 const BASE_URL = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
 const LOGO_URL = `${BASE_URL}/logo/Surge Dark Bg Logo.png`;
 

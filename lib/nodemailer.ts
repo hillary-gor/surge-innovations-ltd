@@ -1,6 +1,7 @@
 import nodemailer from "nodemailer";
 
-const transporter = nodemailer.createTransport({
+// CHANGE: Added 'export' keyword here
+export const transporter = nodemailer.createTransport({
   host: process.env.EMAIL_HOST,
   port: Number(process.env.EMAIL_PORT),
   secure: true,
@@ -10,7 +11,7 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-const baseEmailStyle = `
+export const baseEmailStyle = `
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
   max-width: 600px;
   margin: 0 auto;
@@ -18,6 +19,3 @@ const baseEmailStyle = `
   color: #334155;
   line-height: 1.6;
 `;
-
-export default transporter;
-export { baseEmailStyle };
