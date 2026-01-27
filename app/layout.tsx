@@ -40,7 +40,6 @@ export const metadata: Metadata = {
   description:
     "We design and build custom digital platforms that simplify work, automate tasks, and give you clarity across your operations.",
   
-  // Added Keywords for SEO
   keywords: [
     "Digital Transformation",
     "Custom Software Development",
@@ -57,9 +56,9 @@ export const metadata: Metadata = {
   generator: "Surge",
   
   icons: {
-    icon: "/logo/surge logo (2).ico",
-    shortcut: "/logo/surge logo (2).ico",
-    apple: "/logo/surge logo (2).ico",
+    icon: "/logo/Surge Dark Bg Logo.png",
+    shortcut: "/logo/Surge Dark Bg Logo.png",
+    apple: "/logo/Surge Dark Bg Logo.png",
   },
   manifest: "/site.webmanifest",
   openGraph: {
@@ -70,7 +69,7 @@ export const metadata: Metadata = {
     siteName: "Surge Innovations",
     images: [
       {
-        url: "/logo/surge logo (2).ico",
+        url: "/logo/Surge Dark Bg Logo.png",
         width: 1200,
         height: 630,
         alt: "Surge Innovations - Scalable Impact",
@@ -83,7 +82,7 @@ export const metadata: Metadata = {
     title: "Surge Innovations - Strategy, Code & Scalable Impact",
     description:
       "We design and build custom digital platforms that simplify work, automate tasks, and give you clarity across your operations.",
-    images: ["/logo/surge logo (2).ico"],
+    images: ["/logo/Surge Dark Bg Logo.png"],
   },
 };
 

@@ -1,0 +1,22 @@
+{
+  "name": "Surge Innovations",
+  "short_name": "Surge",
+  "description": "Strategy, Code & Scalable Impact. We build custom digital platforms.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#000000",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/logo/Surge Dark Bg Logo.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/logo/Surge Dark Bg Logo.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
