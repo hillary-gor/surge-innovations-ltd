@@ -6,7 +6,7 @@ import { Features } from "@/components/features";
 import { Services } from "@/components/services";
 import { Benefits } from "@/components/benefits";
 import { CTA } from "@/components/cta";
-import { Footer } from "@/components/footer";
+import { Footer } from "@/components/layout/footer";
 // import MultiPromptPopup from "@/components/marketing/multi-prompt-popup"; // ✅ import popup
 
 export default function Home() {

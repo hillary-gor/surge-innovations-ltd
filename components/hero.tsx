@@ -39,7 +39,7 @@ export function Hero() {
   return (
     <section className="relative min-h-screen flex items-center bg-background overflow-hidden">
       {/* Background gradients */}
-      <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-background to-accent/10" />
+      <div className="absolute inset-0 bg-linear-to-br from-primary/10 via-background to-accent/10" />
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(99,102,241,0.08),transparent_50%)]" />
 
       <div className="relative z-10 w-full mx-auto px-6 md:px-10 lg:px-[2cm] py-20">
@@ -86,10 +86,20 @@ export function Hero() {
               </Button>
             </div>
 
-            <p className="text-sm text-muted-foreground pt-6">
-              Trusted by startups, schools, non-profits, and established
-              organizations
-            </p>
+            {/* ✅ ADDED: Privacy & Terms Compliance Text */}
+            <div className="text-xs text-muted-foreground/80 max-w-md mx-auto lg:mx-0 pt-2">
+              <p>
+                Trusted by startups, schools, and non-profits. <br className="hidden sm:block" />
+                By engaging with us, you agree to our{" "}
+                <Link href="/terms" className="underline hover:text-primary transition-colors">
+                  Terms
+                </Link>{" "}
+                and{" "}
+                <Link href="/privacy" className="underline hover:text-primary transition-colors">
+                  Privacy Policy
+                </Link>.
+              </p>
+            </div>
           </div>
 
           {/* RIGHT: image + thumbnails */}
@@ -142,7 +152,7 @@ export function Hero() {
       </div>
 
       {/* Bottom fade */}
-      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-background to-transparent" />
+      <div className="absolute bottom-0 left-0 right-0 h-32 bg-linear-to-t from-background to-transparent" />
     </section>
   );
 }

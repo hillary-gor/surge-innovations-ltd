@@ -1,171 +1,124 @@
-"use client";
-
+import React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { ModeToggle } from "@/components/layout/mode-toggle";
+import { Button } from "@/components/ui/button";
+import { 
+  Calendar, 
+  Github, 
+  Linkedin, 
+  Twitter, 
+  MapPin, 
+  Mail 
+} from "lucide-react";
 
-const logoUrl =
-  "https://fmkjragqxbepihujxemw.supabase.co/storage/v1/object/public/logos/Surge%20Dark%20Bg%20Logo.png";
+export function Footer() {
+  const currentYear = new Date().getFullYear();
 
-const poweredByLogo =
-  "https://fmkjragqxbepihujxemw.supabase.co/storage/v1/object/public/logos/surge-rectandular-logo.png";
-
-export default function Footer() {
   return (
-    <footer className="border-t border-border bg-card/50 px-4 sm:px-6 lg:px-8 py-8 mt-auto">
-      <div className="max-w-7xl mx-auto">
-        {/* Top grid (compact) */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-8 mb-8">
-          {/* Logo + tagline */}
-          <div className="col-span-2 sm:col-span-1">
-            <div className="flex items-center gap-2 mb-3">
+    // REDUCED HEIGHT: Changed pt-16 to pt-10 and pb-8 to pb-6
+    <footer className="border-t border-border/50 bg-muted/30 pt-10 pb-6">
+      <div className="mx-auto max-w-7xl px-6 md:px-8">
+        
+        {/* TOP SECTION: Grid Layout */}
+        {/* REDUCED GAP: Changed gap-12 mb-16 to gap-8 mb-10 */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-10">
+          
+          {/* Column 1: Brand & Bio */}
+          <div className="space-y-4">
+            <Link href="/" className="block">
               <Image
-                src={logoUrl}
-                alt="Surge"
-                width={80}
-                height={80}
-                className="h-10 w-auto"
+                src="/logo/surge-rectandular-logo.png"
+                alt="Surge Innovations"
+                width={120}
+                height={35}
+                className="h-8 w-auto opacity-90 hover:opacity-100 transition-opacity"
               />
-              <h3 className="font-semibold text-foreground text-sm">
-                Surge Connect
-              </h3>
-            </div>
-            <p className="text-xs text-muted-foreground leading-relaxed max-w-50">
-              Connecting families with trusted caregivers and medical
-              professionals.
+            </Link>
+            <p className="text-muted-foreground text-xs leading-relaxed max-w-xs">
+              Strategy, Code & Scalable Impact. Transforming businesses through digital excellence.
             </p>
+            <div className="flex gap-3 pt-1">
+              <SocialLink href="#" icon={Linkedin} />
+              <SocialLink href="#" icon={Twitter} />
+              <SocialLink href="#" icon={Github} />
+            </div>
           </div>
 
-          {/* Clients */}
+          {/* Column 2: Quick Links */}
           <div>
-            <h4 className="font-semibold text-foreground mb-3 text-xs uppercase tracking-wider">
-              For Clients
-            </h4>
-            <ul className="space-y-2 text-xs">
-              <li>
-                <Link
-                  href="/search"
-                  className="text-muted-foreground hover:text-foreground transition-colors"
-                >
-                  Find Caregivers
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/pricing"
-                  className="text-muted-foreground hover:text-foreground transition-colors"
-                >
-                  How It Works
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/faq"
-                  className="text-muted-foreground hover:text-foreground transition-colors"
-                >
-                  FAQ
-                </Link>
-              </li>
+            <h3 className="font-semibold text-foreground text-sm mb-3">Company</h3>
+            <ul className="space-y-2 text-xs text-muted-foreground">
+              <FooterLink href="/about">About Us</FooterLink>
+              <FooterLink href="/projects">Case Studies</FooterLink>
+              <FooterLink href="/join-team">Careers / Join Team</FooterLink>
+              <FooterLink href="/contact">Contact</FooterLink>
             </ul>
           </div>
 
-          {/* Caregivers */}
+          {/* Column 3: Contact Info */}
           <div>
-            <h4 className="font-semibold text-foreground mb-3 text-xs uppercase tracking-wider">
-              For Caregivers
-            </h4>
-            <ul className="space-y-2 text-xs">
-              <li>
-                <Link
-                  href="/signup/caregiver"
-                  className="text-muted-foreground hover:text-foreground transition-colors"
-                >
-                  Join as Caregiver
-                </Link>
+            <h3 className="font-semibold text-foreground text-sm mb-3">Contact</h3>
+            <ul className="space-y-2 text-xs text-muted-foreground">
+              <li className="flex items-start gap-2">
+                <MapPin className="h-3.5 w-3.5 mt-0.5 text-primary" />
+                <span>Nairobi, Kenya</span>
               </li>
-              <li>
-                <Link
-                  href="/pricing"
-                  className="text-muted-foreground hover:text-foreground transition-colors"
-                >
-                  Pricing
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/about"
-                  className="text-muted-foreground hover:text-foreground transition-colors"
-                >
-                  About Us
-                </Link>
-              </li>
-            </ul>
-          </div>
-
-          {/* Legal */}
-          <div>
-            <h4 className="font-semibold text-foreground mb-3 text-xs uppercase tracking-wider">
-              Legal
-            </h4>
-            <ul className="space-y-2 text-xs">
-              <li>
-                <Link
-                  href="/terms"
-                  className="text-muted-foreground hover:text-foreground transition-colors"
-                >
-                  Terms
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/privacy"
-                  className="text-muted-foreground hover:text-foreground transition-colors"
-                >
-                  Privacy
-                </Link>
-              </li>
-              <li>
-                <a
-                  href="mailto:support@Surgeconnect.com"
-                  className="text-muted-foreground hover:text-foreground transition-colors"
-                >
-                  Contact
+              <li className="flex items-center gap-2">
+                <Mail className="h-3.5 w-3.5 text-primary" />
+                <a href="mailto:hello@surgeinnovations.org" className="hover:text-foreground transition-colors">
+                  hello@surgeinnovations.org
                 </a>
               </li>
             </ul>
           </div>
-        </div>
 
-        {/* Bottom (very thin) */}
-        <div className="border-t border-border pt-6">
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-muted-foreground">
-            <p>© 2025 Surge Connect. All rights reserved.</p>
-
-            <div className="flex items-center gap-6">
-              {/* Mode Toggle Here */}
-              <ModeToggle />
-
-              <div className="flex items-center gap-2">
-                <span className="opacity-70">Powered by</span>
-                <Link
-                  href="https://surgeinnovations.org"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hover:opacity-80 transition-opacity"
-                >
-                  <Image
-                    src={poweredByLogo}
-                    alt="Surge"
-                    width={70}
-                    height={70}
-                    className="h-4 w-auto object-contain cursor-pointer"
-                  />
-                </Link>
-              </div>
-            </div>
+          {/* Column 4: CTA */}
+          <div className="flex flex-col gap-3">
+            <h3 className="font-semibold text-foreground text-sm">Start a Project</h3>
+            <Button asChild className="w-full sm:w-auto h-9 text-xs">
+              <Link href="/contact">
+                <Calendar className="h-3.5 w-3.5 mr-2" />
+                Schedule Visit
+              </Link>
+            </Button>
           </div>
         </div>
+
+        {/* BOTTOM SECTION: Copyright & Legal */}
+        <div className="border-t border-border pt-6 flex flex-col md:flex-row items-center justify-between gap-4 text-[10px] md:text-xs text-muted-foreground">
+          <p>© {currentYear} Surge Innovations Ltd.</p>
+          
+          <div className="flex flex-wrap justify-center gap-4 md:gap-6">
+            <Link href="/terms" className="hover:text-foreground transition-colors">Terms</Link>
+            <Link href="/privacy" className="hover:text-foreground transition-colors">Privacy</Link>
+            <Link href="/cookies" className="hover:text-foreground transition-colors">Cookies</Link>
+          </div>
+        </div>
+
       </div>
     </footer>
+  );
+}
+
+function FooterLink({ href, children }: { href: string; children: React.ReactNode }) {
+  return (
+    <li>
+      <Link href={href} className="hover:text-primary transition-colors block py-0.5">
+        {children}
+      </Link>
+    </li>
+  );
+}
+
+function SocialLink({ href, icon: Icon }: { href: string; icon: React.ElementType }) {
+  return (
+    <a 
+      href={href} 
+      target="_blank" 
+      rel="noreferrer"
+      className="bg-background border border-border p-1.5 rounded-full hover:bg-muted hover:text-foreground transition-colors text-muted-foreground"
+    >
+      <Icon className="h-3.5 w-3.5" />
+    </a>
   );
 }

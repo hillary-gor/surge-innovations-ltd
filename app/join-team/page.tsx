@@ -1,329 +1,246 @@
+import React from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { Checkbox } from "@/components/ui/checkbox";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Users, Code, Rocket, Award, Heart, Lightbulb } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { 
+  Users, Rocket, Award, Heart, Lightbulb, 
+  CheckCircle2, XCircle, Terminal 
+} from "lucide-react";
+import { VolunteerApplicationModal } from "./VolunteerApplicationModal";
 
 export default function JoinTeamPage() {
   return (
-    <div className="min-h-screen">
-      {/* Hero Section */}
-      <section className="relative py-20 px-4 bg-linear-to-br from-primary/5 via-background to-accent/5">
-        <div className="max-w-4xl mx-auto text-center">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium mb-6">
-            <Heart className="h-4 w-4" />
-            Volunteer Opportunity
-          </div>
-          <h1 className="text-4xl md:text-6xl font-bold mb-6 text-balance">
-            Build Real Products.
-            <br />
-            <span className="text-primary">Grow Your Skills.</span>
+    <div className="min-h-screen bg-background text-foreground">
+      
+      {/* HERO SECTION */}
+      <section className="relative py-24 px-4 overflow-hidden border-b border-border/40">
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-size-[24px_24px]"></div>
+        <div className="absolute left-0 right-0 top-0 -z-10 m-auto h-77.5 w-77.5 rounded-full bg-primary/20 opacity-20 blur-[100px]"></div>
+        
+        <div className="relative max-w-4xl mx-auto text-center z-10">
+          <Badge variant="secondary" className="mb-6 px-4 py-1.5 text-sm rounded-full border-primary/20 bg-primary/5 text-primary">
+            <Heart className="h-3.5 w-3.5 mr-2 fill-primary/20" />
+            Volunteer Career Accelerator
+          </Badge>
+          
+          <h1 className="text-4xl md:text-7xl font-extrabold mb-6 tracking-tight text-balance">
+            Don&apos;t just watch tutorials. <br />
+            <span className="text-primary">Ship Production Code.</span>
           </h1>
-          <p className="text-xl text-muted-foreground mb-8 text-pretty max-w-2xl mx-auto">
-            Join our volunteer program and work alongside experienced engineers
-            on live client projects. Gain hands-on experience, build your
-            portfolio, and make an impact—all while learning from the best.
+          
+          <p className="text-lg md:text-xl text-muted-foreground mb-10 max-w-2xl mx-auto leading-relaxed">
+            Join Surge as a volunteer engineer. Bridge the gap between &quot;learning to code&quot; and &quot;being a professional developer&quot; by working on live client projects.
           </p>
-        </div>
-      </section>
-
-      {/* Why Join Section */}
-      <section className="py-16 px-4">
-        <div className="max-w-6xl mx-auto">
-          <h2 className="text-3xl font-bold text-center mb-12">
-            Why Volunteer at Surge?
-          </h2>
-          <div className="grid md:grid-cols-3 gap-8">
-            <Card className="p-6">
-              <Code className="h-12 w-12 text-primary mb-4" />
-              <h3 className="text-xl font-semibold mb-3">
-                Real-World Experience
-              </h3>
-              <p className="text-muted-foreground">
-                Work on actual client projects that impact thousands of users.
-                Build production-ready software, not just tutorials.
-              </p>
-            </Card>
-            <Card className="p-6">
-              <Users className="h-12 w-12 text-primary mb-4" />
-              <h3 className="text-xl font-semibold mb-3">
-                Mentorship & Growth
-              </h3>
-              <p className="text-muted-foreground">
-                Learn from senior engineers through code reviews, pair
-                programming, and direct feedback. Level up your skills fast.
-              </p>
-            </Card>
-            <Card className="p-6">
-              <Award className="h-12 w-12 text-primary mb-4" />
-              <h3 className="text-xl font-semibold mb-3">
-                Portfolio & References
-              </h3>
-              <p className="text-muted-foreground">
-                Build an impressive portfolio with real projects. Get references
-                and recommendations for future opportunities.
-              </p>
-            </Card>
-            <Card className="p-6">
-              <Rocket className="h-12 w-12 text-primary mb-4" />
-              <h3 className="text-xl font-semibold mb-3">Modern Tech Stack</h3>
-              <p className="text-muted-foreground">
-                Work with cutting-edge technologies: Next.js, React, TypeScript,
-                Node.js, cloud platforms, and more.
-              </p>
-            </Card>
-            <Card className="p-6">
-              <Lightbulb className="h-12 w-12 text-primary mb-4" />
-              <h3 className="text-xl font-semibold mb-3">
-                Flexible Commitment
-              </h3>
-              <p className="text-muted-foreground">
-                Contribute on your schedule. We value quality over quantity and
-                understand you have other commitments.
-              </p>
-            </Card>
-            <Card className="p-6">
-              <Heart className="h-12 w-12 text-primary mb-4" />
-              <h3 className="text-xl font-semibold mb-3">Community Impact</h3>
-              <p className="text-muted-foreground">
-                Help startups, schools, and non-profits build technology that
-                makes a difference in people&apos;s lives.
-              </p>
-            </Card>
+          
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <VolunteerApplicationModal>
+              <Button size="lg" className="h-14 px-8 text-base shadow-lg shadow-primary/20">
+                 Apply to Join Now
+              </Button>
+            </VolunteerApplicationModal>
+            <Button variant="outline" size="lg" className="h-14 px-8 text-base" asChild>
+              <a href="#how-it-works">How it works</a>
+            </Button>
           </div>
         </div>
       </section>
 
-      {/* What We Look For */}
-      <section className="py-16 px-4 bg-muted/30">
-        <div className="max-w-4xl mx-auto">
-          <h2 className="text-3xl font-bold text-center mb-8">
-            What We&apos;re Looking For
-          </h2>
-          <div className="space-y-4">
-            <Card className="p-6">
-              <h3 className="font-semibold text-lg mb-2">
-                Passion for Learning
-              </h3>
-              <p className="text-muted-foreground">
-                You&apos;re eager to grow, open to feedback, and excited about
-                building great software.
-              </p>
-            </Card>
-            <Card className="p-6">
-              <h3 className="font-semibold text-lg mb-2">
-                Foundation in Development
-              </h3>
-              <p className="text-muted-foreground">
-                You have basic knowledge of web development (HTML, CSS,
-                JavaScript) and are ready to level up. Self-taught? Bootcamp
-                grad? CS degree? All backgrounds welcome.
-              </p>
-            </Card>
-            <Card className="p-6">
-              <h3 className="font-semibold text-lg mb-2">
-                Commitment & Reliability
-              </h3>
-              <p className="text-muted-foreground">
-                You can dedicate consistent time each week and follow through on
-                commitments.
-              </p>
-            </Card>
-            <Card className="p-6">
-              <h3 className="font-semibold text-lg mb-2">
-                Collaborative Spirit
-              </h3>
-              <p className="text-muted-foreground">
-                You work well with others, communicate clearly, and contribute
-                positively to the team.
-              </p>
-            </Card>
-          </div>
-        </div>
-      </section>
-
-      {/* Application Form */}
-      <section className="py-16 px-4">
-        <div className="max-w-2xl mx-auto">
+      {/* WHO IS THIS FOR? (Filtering Section) */}
+      <section className="py-20 px-4 bg-muted/30">
+        <div className="max-w-5xl mx-auto">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">Apply to Join Our Team</h2>
-            <p className="text-muted-foreground">
-              Fill out the form below and we&apos;ll review your application.
-              Selected candidates will be invited for an interview to discuss
-              the opportunity further.
+            <h2 className="text-3xl font-bold mb-4">Is this program right for you?</h2>
+            <p className="text-muted-foreground">We value your time. Check if we are a match.</p>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-8">
+            <Card className="p-8 border-green-500/20 bg-green-500/5">
+              <h3 className="text-xl font-bold flex items-center mb-6 text-green-700 dark:text-green-400">
+                <CheckCircle2 className="w-6 h-6 mr-2" /> This IS for you if...
+              </h3>
+              <ul className="space-y-4">
+                <CheckItem text="You know the basics (HTML/JS/React) but lack real-world experience." />
+                <CheckItem text="You want to fill your portfolio with live, deployed projects." />
+                <CheckItem text="You can commit 5-10 hours/week reliably." />
+                <CheckItem text="You are proactive and can research solutions independently." />
+              </ul>
+            </Card>
+
+            <Card className="p-8 border-rose-500/20 bg-rose-500/5">
+              <h3 className="text-xl font-bold flex items-center mb-6 text-rose-700 dark:text-rose-400">
+                <XCircle className="w-6 h-6 mr-2" /> This is NOT for you if...
+              </h3>
+              <ul className="space-y-4">
+                <CrossItem text="You represent an agency looking to outsource work." />
+                <CrossItem text="You have absolutely zero coding knowledge (we are not a bootcamp)." />
+                <CrossItem text="You cannot communicate or attend sync meetings." />
+                <CrossItem text="You are looking for an immediate full-time salary (this is a volunteer role)." />
+              </ul>
+            </Card>
+          </div>
+        </div>
+      </section>
+
+      {/* WHY JOIN SECTION (MOBILE SLIDER) */}
+      <section className="py-20 px-4">
+        <div className="max-w-6xl mx-auto">
+          <div className="flex flex-col md:flex-row justify-between items-end mb-8 md:mb-12">
+            <div>
+              <h2 className="text-3xl font-bold mb-2">Why Volunteer at Surge?</h2>
+              <p className="text-muted-foreground">It&apos;s an exchange: Your time for our mentorship & platform.</p>
+            </div>
+            {/* Mobile Hint */}
+            <p className="md:hidden text-xs text-muted-foreground mt-4 animate-pulse">
+              ← Swipe to see more →
             </p>
           </div>
+          
+          {/* MOBILE: Flex + Overflow + Snap
+             DESKTOP: Grid + No Overflow
+          */}
+          <div className="
+            flex overflow-x-auto snap-x snap-mandatory gap-4 pb-8 -mx-4 px-4 
+            md:grid md:grid-cols-3 md:gap-6 md:overflow-visible md:pb-0 md:mx-0 md:px-0
+            [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]
+          ">
+            <div className="min-w-[85vw] md:min-w-0 snap-center">
+              <FeatureCard 
+                icon={Terminal} 
+                title="Modern Stack Only" 
+                desc="Forget jQuery. We build with Next.js 14, TypeScript, Supabase, Tailwind, and OpenAI APIs." 
+              />
+            </div>
+            <div className="min-w-[85vw] md:min-w-0 snap-center">
+              <FeatureCard 
+                icon={Users} 
+                title="Senior Code Reviews" 
+                desc="Get your Pull Requests reviewed by senior engineers. This is the fastest way to improve." 
+              />
+            </div>
+            <div className="min-w-[85vw] md:min-w-0 snap-center">
+              <FeatureCard 
+                icon={Award} 
+                title="Job References" 
+                desc="Perform well, and we will serve as a glowing reference for your future job applications." 
+              />
+            </div>
+            <div className="min-w-[85vw] md:min-w-0 snap-center">
+              <FeatureCard 
+                icon={Rocket} 
+                title="Shipping Culture" 
+                desc="We ship fast. You will learn CI/CD, deployment pipelines, and production monitoring." 
+              />
+            </div>
+            <div className="min-w-[85vw] md:min-w-0 snap-center">
+              <FeatureCard 
+                icon={Lightbulb} 
+                title="Business Context" 
+                desc="Learn how to translate client requirements into technical specs—a vital senior skill." 
+              />
+            </div>
+            <div className="min-w-[85vw] md:min-w-0 snap-center">
+              <FeatureCard 
+                icon={Heart} 
+                title="Community Impact" 
+                desc="Help us build tools for non-profits and local startups that actually need them." 
+              />
+            </div>
+          </div>
+        </div>
+      </section>
 
-          <Card className="p-8">
-            <form className="space-y-6">
-              <div className="grid md:grid-cols-2 gap-6">
-                <div className="space-y-2">
-                  <Label htmlFor="firstName">First Name *</Label>
-                  <Input id="firstName" placeholder="John" required />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="lastName">Last Name *</Label>
-                  <Input id="lastName" placeholder="Doe" required />
-                </div>
+      {/* HOW IT WORKS (Timeline Slider on Mobile) */}
+      <section id="how-it-works" className="py-20 px-4 border-t border-border/50 bg-muted/10">
+        <div className="max-w-4xl mx-auto">
+          <h2 className="text-3xl font-bold text-center mb-10 md:mb-16">How it works</h2>
+          
+          <div className="relative">
+            {/* Connecting Line (Desktop Only) */}
+            <div className="hidden md:block absolute top-1/2 left-0 w-full h-0.5 bg-border -z-10 -translate-y-1/2"></div>
+
+            <div className="
+              flex overflow-x-auto snap-x snap-mandatory gap-6 pb-8 -mx-4 px-4
+              md:grid md:grid-cols-4 md:gap-8 md:overflow-visible md:pb-0 md:mx-0 md:px-0
+              [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]
+            ">
+              <div className="min-w-[70vw] md:min-w-0 snap-center">
+                <TimelineStep number="1" title="Apply" desc="Fill out the form. Tell us what you know and what you want to learn." />
               </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="email">Email Address *</Label>
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="john@example.com"
-                  required
-                />
+              <div className="min-w-[70vw] md:min-w-0 snap-center">
+                <TimelineStep number="2" title="Chat" desc="A quick 15-min call to align expectations and check technical fit." />
               </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="phone">Phone Number *</Label>
-                <Input
-                  id="phone"
-                  type="tel"
-                  placeholder="+254 700 000 000"
-                  required
-                />
+              <div className="min-w-[70vw] md:min-w-0 snap-center">
+                <TimelineStep number="3" title="Onboard" desc="Get access to our GitHub, Slack, and your first 'Good First Issue'." />
               </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="location">Location (City, Country) *</Label>
-                <Input id="location" placeholder="Nairobi, Kenya" required />
+              <div className="min-w-[70vw] md:min-w-0 snap-center">
+                <TimelineStep number="4" title="Build" desc="Pick tasks, write code, get reviewed, and merge to production." />
               </div>
+            </div>
+          </div>
+        </div>
+      </section>
 
-              <div className="space-y-2">
-                <Label htmlFor="experience">Experience Level *</Label>
-                <Select>
-                  <SelectTrigger id="experience">
-                    <SelectValue placeholder="Select your experience level" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="beginner">
-                      Beginner (0-1 years)
-                    </SelectItem>
-                    <SelectItem value="intermediate">
-                      Intermediate (1-3 years)
-                    </SelectItem>
-                    <SelectItem value="advanced">
-                      Advanced (3+ years)
-                    </SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="background">Educational Background *</Label>
-                <Select>
-                  <SelectTrigger id="background">
-                    <SelectValue placeholder="Select your background" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="self-taught">Self-Taught</SelectItem>
-                    <SelectItem value="bootcamp">Bootcamp Graduate</SelectItem>
-                    <SelectItem value="cs-degree">
-                      Computer Science Degree
-                    </SelectItem>
-                    <SelectItem value="other-degree">
-                      Other Degree + Self-Study
-                    </SelectItem>
-                    <SelectItem value="currently-studying">
-                      Currently Studying
-                    </SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="skills">Technical Skills *</Label>
-                <Textarea
-                  id="skills"
-                  placeholder="List your technical skills (e.g., JavaScript, React, Node.js, Python, SQL, etc.)"
-                  rows={3}
-                  required
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="portfolio">Portfolio / GitHub URL</Label>
-                <Input
-                  id="portfolio"
-                  type="url"
-                  placeholder="https://github.com/yourusername or your portfolio site"
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="availability">Weekly Availability *</Label>
-                <Select>
-                  <SelectTrigger id="availability">
-                    <SelectValue placeholder="How many hours per week can you commit?" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="5-10">5-10 hours/week</SelectItem>
-                    <SelectItem value="10-15">10-15 hours/week</SelectItem>
-                    <SelectItem value="15-20">15-20 hours/week</SelectItem>
-                    <SelectItem value="20+">20+ hours/week</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="motivation">
-                  Why do you want to join Surge? *
-                </Label>
-                <Textarea
-                  id="motivation"
-                  placeholder="Tell us what excites you about this opportunity and what you hope to learn..."
-                  rows={4}
-                  required
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="projects">
-                  Previous Projects or Experience
-                </Label>
-                <Textarea
-                  id="projects"
-                  placeholder="Describe any projects you've worked on, even personal or learning projects..."
-                  rows={4}
-                />
-              </div>
-
-              <div className="flex items-start space-x-2">
-                <Checkbox id="terms" required />
-                <label
-                  htmlFor="terms"
-                  className="text-sm text-muted-foreground leading-relaxed"
-                >
-                  I understand this is an unpaid volunteer position focused on
-                  learning and skill development. I commit to being reliable,
-                  communicative, and contributing positively to the team. *
-                </label>
-              </div>
-
-              <Button type="submit" size="lg" className="w-full">
-                Submit Application
-              </Button>
-            </form>
-          </Card>
-
-          <p className="text-center text-sm text-muted-foreground mt-6">
-            We review applications on a rolling basis and will reach out within
-            1-2 weeks if your profile is a good fit.
+      {/* CTA Footer */}
+      <section className="py-24 bg-primary/5 text-center px-4">
+        <div className="max-w-2xl mx-auto">
+          <h2 className="text-3xl font-bold mb-4">Ready to accelerate your career?</h2>
+          <p className="text-muted-foreground mb-8 text-lg">
+            We review applications on a rolling basis. Spots are limited to ensure quality mentorship.
+          </p>
+          
+          <VolunteerApplicationModal>
+             <Button size="lg" className="h-12 px-8 text-lg">Start Your Application</Button>
+          </VolunteerApplicationModal>
+          
+          <p className="text-xs text-muted-foreground mt-6">
+            By applying, you agree to our terms of volunteer engagement.
           </p>
         </div>
       </section>
     </div>
   );
+}
+
+// --- HELPER COMPONENTS ---
+
+function FeatureCard({ icon: Icon, title, desc }: { icon: React.ElementType, title: string, desc: string }) {
+  return (
+    <Card className="h-full p-6 transition-all duration-300 hover:border-primary/50 hover:shadow-lg group">
+      <div className="h-12 w-12 rounded-lg bg-primary/10 flex items-center justify-center mb-4 group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
+        <Icon className="h-6 w-6 text-primary group-hover:text-primary-foreground" />
+      </div>
+      <h3 className="text-xl font-bold mb-2">{title}</h3>
+      <p className="text-muted-foreground text-sm leading-relaxed">{desc}</p>
+    </Card>
+  )
+}
+
+function CheckItem({ text }: { text: string }) {
+  return (
+    <li className="flex items-start gap-3">
+      <CheckCircle2 className="w-5 h-5 text-green-600 mt-0.5 shrink-0" />
+      <span className="text-sm text-foreground/90">{text}</span>
+    </li>
+  )
+}
+
+function CrossItem({ text }: { text: string }) {
+  return (
+    <li className="flex items-start gap-3">
+      <XCircle className="w-5 h-5 text-rose-600 mt-0.5 shrink-0" />
+      <span className="text-sm text-foreground/90">{text}</span>
+    </li>
+  )
+}
+
+function TimelineStep({ number, title, desc }: { number: string, title: string, desc: string }) {
+  return (
+    <div className="flex flex-col items-center text-center bg-background md:bg-transparent p-6 rounded-xl border border-border md:border-none shadow-sm md:shadow-none h-full md:p-0">
+      <div className="w-10 h-10 rounded-full bg-primary text-primary-foreground flex items-center justify-center font-bold mb-4 border-4 border-background z-10 shadow-sm shrink-0">
+        {number}
+      </div>
+      <h3 className="font-bold text-lg mb-2">{title}</h3>
+      <p className="text-sm text-muted-foreground">{desc}</p>
+    </div>
+  )
 }

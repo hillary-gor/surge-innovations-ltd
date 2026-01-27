@@ -1,7 +1,7 @@
 "use client";
 
 import { Navigation } from "@/components/navigation";
-import { Footer } from "@/components/footer";
+import { Footer } from "@/components/layout/footer";
 import { Button } from "@/components/ui/button";
 import {
   Code,
