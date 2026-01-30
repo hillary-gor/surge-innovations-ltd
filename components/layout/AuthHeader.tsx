@@ -16,21 +16,23 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog"; // Import Dialog components
+} from "@/components/ui/dialog";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { SignOutButton } from "@/app/auth/SignOutButton";
 import { Button } from "@/components/ui/button";
 import { 
   Settings, 
-  User as UserIcon, 
   Calendar, 
   LayoutDashboard, 
   Camera, 
+  CreditCard,
+  Inbox,
+  Layers,
+  LifeBuoy
 } from "lucide-react";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { Database } from "@/types/supabase";
-// Import the AvatarUpload component created previously
 import { AvatarUpload } from "@/components/profile/AvatarUpload"; 
 
 type UserRole = Database["public"]["Enums"]["user_role"];
@@ -48,8 +50,6 @@ export function AuthHeader() {
   const [user, setUser] = useState<SupabaseUser | null>(null);
   const [profile, setProfile] = useState<Profile | null>(null);
   const [loading, setLoading] = useState(true);
-  
-  // State to control the Avatar Upload Modal
   const [isAvatarOpen, setIsAvatarOpen] = useState(false);
 
   const supabase = createClient();
@@ -76,6 +76,8 @@ export function AuthHeader() {
     return `/dashboard/${role}`;
   }, [profile?.role]);
 
+  const userRole = profile?.role || 'client';
+
   useEffect(() => {
     let isMounted = true;
 
@@ -100,6 +102,7 @@ export function AuthHeader() {
           if (profileData) {
             setProfile(profileData as Profile);
           } else {
+            // Fallback if profile doesn't exist yet
             setProfile({
               id: authUser.id,
               full_name: authUser.user_metadata?.full_name || "User",
@@ -132,6 +135,7 @@ export function AuthHeader() {
       }
     );
 
+    // Real-time listener for Role/Avatar changes
     let profileChannel: ReturnType<typeof supabase.channel> | null = null;
     if (user?.id) {
       profileChannel = supabase
@@ -168,9 +172,9 @@ export function AuthHeader() {
             </DialogHeader>
             <div className="flex justify-center py-4">
                <AvatarUpload 
-                  uid={user.id} 
-                  url={profile.avatar_url} 
-                  onUpload={() => setIsAvatarOpen(false)} // Close modal on success
+                 uid={user.id} 
+                 url={profile.avatar_url} 
+                 onUpload={() => setIsAvatarOpen(false)} 
                />
             </div>
           </DialogContent>
@@ -226,10 +230,11 @@ export function AuthHeader() {
                   </AvatarFallback>
                 </Avatar>
                 
-                {/* --- CLICKABLE CAMERA ICON (TRIGGERS MODAL) --- */}
+                {/* --- CLICKABLE CAMERA ICON --- */}
                 <div 
                   onClick={(e) => {
-                    e.preventDefault(); // Prevent closing dropdown immediately if desired, though usually closing is better
+                    e.preventDefault();
+                    e.stopPropagation();
                     setIsAvatarOpen(true);
                   }}
                   className="absolute bottom-0 right-0 p-1.5 bg-card border border-border rounded-full shadow-md text-foreground hover:bg-muted transition-colors cursor-pointer z-50"
@@ -245,8 +250,8 @@ export function AuthHeader() {
               <p className="text-sm text-muted-foreground text-center break-all px-4">
                 {profile.email}
               </p>
-              <Badge variant="outline" className="mt-2 text-[10px] uppercase tracking-wider">
-                 {profile.role || 'Client'}
+              <Badge variant={userRole === 'admin' ? "default" : "outline"} className="mt-2 text-[10px] uppercase tracking-wider">
+                 {userRole}
               </Badge>
             </div>
 
@@ -259,24 +264,60 @@ export function AuthHeader() {
                   </Link>
                 </DropdownMenuItem>
                 
-                <DropdownMenuItem asChild className="rounded-lg py-2.5 cursor-pointer focus:bg-muted/50">
-                  <Link href={`${dashboardLink}/profile`}>
-                    <UserIcon className="mr-3 h-4 w-4 text-muted-foreground" />
-                    <span>My Profile</span>
-                  </Link>
-                </DropdownMenuItem>
-                
-                <DropdownMenuItem asChild className="rounded-lg py-2.5 cursor-pointer focus:bg-muted/50">
-                  <Link href={`${dashboardLink}/bookings`}>
-                    <Calendar className="mr-3 h-4 w-4 text-muted-foreground" />
-                    <span>My Bookings</span>
-                  </Link>
-                </DropdownMenuItem>
+                {/* --- ADMIN ONLY LINKS --- */}
+                {userRole === 'admin' ? (
+                  <>
+                    <DropdownMenuItem asChild className="rounded-lg py-2.5 cursor-pointer focus:bg-muted/50">
+                      <Link href="/dashboard/admin/projects">
+                        <Layers className="mr-3 h-4 w-4 text-muted-foreground" />
+                        <span>Projects</span>
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild className="rounded-lg py-2.5 cursor-pointer focus:bg-muted/50">
+                      <Link href="/dashboard/admin/messages">
+                        <Inbox className="mr-3 h-4 w-4 text-muted-foreground" />
+                        <span>Inbox</span>
+                      </Link>
+                    </DropdownMenuItem>
+                  </>
+                ) : (
+                  // --- CLIENT LINKS ---
+                  <>
+                    <DropdownMenuItem asChild className="rounded-lg py-2.5 cursor-pointer focus:bg-muted/50">
+                      <Link href="/dashboard/client/projects">
+                        <Layers className="mr-3 h-4 w-4 text-muted-foreground" />
+                        <span>My Projects</span>
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild className="rounded-lg py-2.5 cursor-pointer focus:bg-muted/50">
+                      <Link href="/dashboard/client/bookings">
+                        <Calendar className="mr-3 h-4 w-4 text-muted-foreground" />
+                        <span>My Bookings</span>
+                      </Link>
+                    </DropdownMenuItem>
+                     <DropdownMenuItem asChild className="rounded-lg py-2.5 cursor-pointer focus:bg-muted/50">
+                      <Link href="/dashboard/client/billing">
+                        <CreditCard className="mr-3 h-4 w-4 text-muted-foreground" />
+                        <span>Billing</span>
+                      </Link>
+                    </DropdownMenuItem>
+                  </>
+                )}
 
+                <DropdownMenuSeparator className="my-1 bg-border" />
+
+                {/* Common Links */}
                 <DropdownMenuItem asChild className="rounded-lg py-2.5 cursor-pointer focus:bg-muted/50">
                   <Link href={`${dashboardLink}/settings`}>
                     <Settings className="mr-3 h-4 w-4 text-muted-foreground" />
                     <span>Settings</span>
+                  </Link>
+                </DropdownMenuItem>
+                
+                 <DropdownMenuItem asChild className="rounded-lg py-2.5 cursor-pointer focus:bg-muted/50">
+                  <Link href={userRole === 'admin' ? "/dashboard/admin/support" : "/dashboard/client/support"}>
+                    <LifeBuoy className="mr-3 h-4 w-4 text-muted-foreground" />
+                    <span>Support</span>
                   </Link>
                 </DropdownMenuItem>
 

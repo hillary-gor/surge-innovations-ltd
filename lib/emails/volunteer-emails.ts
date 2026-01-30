@@ -92,3 +92,92 @@ export function generateVolunteerAckEmail(firstName: string, level: string) {
 </html>
   `;
 }
+
+export function generateDecisionEmail(firstName: string, status: "accepted" | "rejected", role: string) {
+  const isAccepted = status === "accepted";
+  
+  // Use similar pretty labels for the decision email
+  const roleLabels: Record<string, string> = {
+    beginner: "Beginner Developer",
+    intermediate: "Junior Developer",
+    advanced: "Senior/Lead Developer",
+  };
+  const prettyRole = roleLabels[role] || role;
+
+  const subject = isAccepted 
+    ? "🎉 Welcome to the Team! - Surge Innovations" 
+    : "Update regarding your application - Surge Innovations";
+
+  // Dynamic Content Logic
+  const heading = isAccepted 
+    ? `Congratulations, ${firstName}!` 
+    : `Hi ${firstName},`;
+
+  const headingColor = isAccepted ? "#16a34a" : "#111827";
+
+  const mainBody = isAccepted 
+    ? `
+      <p>We are thrilled to accept you into the Surge Volunteer Program!</p>
+      <p>Your background stood out to us, and we believe you will be a great addition to the team as a <strong>${prettyRole}</strong>.</p>
+      
+      <div class="highlight-box" style="border-left-color: #16a34a; background-color: #f0fdf4;">
+        <strong style="color: #15803d;">Next Steps:</strong>
+        <ul style="margin: 10px 0 0 0; padding-left: 20px; color: #166534;">
+          <li style="margin-bottom: 5px;">Watch your inbox for a Slack invitation.</li>
+          <li style="margin-bottom: 5px;">We will schedule a kickoff call this week.</li>
+          <li>Review the "Getting Started" guide on the dashboard.</li>
+        </ul>
+      </div>
+
+      <div style="text-align: center; margin-top: 30px;">
+        <a href="https://surgeinnovations.org/dashboard" class="button" style="background-color: #16a34a;">Go to Dashboard</a>
+      </div>
+    ` 
+    : `
+      <p>Thank you so much for your interest in Surge Innovations and for taking the time to apply for the <strong>${prettyRole}</strong> position.</p>
+      <p>We received many qualified applications this cycle. After careful review, we are unfortunately <strong>not able to move forward</strong> with your application at this time.</p>
+      <p>This was a difficult decision, but we encourage you to apply again in the future as you gain more experience or as new tracks open up.</p>
+      
+      <div style="text-align: center; margin-top: 30px;">
+        <a href="https://surgeinnovations.org/careers" class="button" style="background-color: #4b5563;">View Other Openings</a>
+      </div>
+    `;
+
+  return {
+    subject,
+    html: `
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f9fafb; margin: 0; padding: 0; }
+    .container { max-width: 600px; margin: 40px auto; background: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.05); border: 1px solid #e5e7eb; }
+    .header { background: #000000; padding: 30px; text-align: center; }
+    .logo { color: #ffffff; font-size: 24px; font-weight: bold; text-decoration: none; letter-spacing: -0.5px; }
+    .content { padding: 40px 30px; color: #374151; line-height: 1.6; }
+    .h1 { font-size: 22px; font-weight: 700; color: ${headingColor}; margin-bottom: 20px; }
+    .highlight-box { background-color: #f3f4f6; border-left: 4px solid #000000; padding: 15px; margin: 25px 0; border-radius: 4px; }
+    .footer { background: #f9fafb; padding: 20px; text-align: center; font-size: 12px; color: #9ca3af; border-top: 1px solid #e5e7eb; }
+    .button { display: inline-block; background-color: #000000; color: #ffffff; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: 600; margin-top: 10px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="logo">SURGE INNOVATIONS</div>
+    </div>
+    
+    <div class="content">
+      <div class="h1">${heading}</div>
+      ${mainBody}
+    </div>
+
+    <div class="footer">
+      &copy; ${new Date().getFullYear()} Surge Innovations Ltd. Nairobi, Kenya.<br/>
+      This is an automated message. Please do not reply directly.
+    </div>
+  </div>
+</body>
+</html>
+  `};
+}

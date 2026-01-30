@@ -4,7 +4,7 @@ import { createClient } from "@/utils/supabase/server";
 import { revalidatePath } from "next/cache";
 import { volunteerSchema } from "@/lib/schemas/volunteer-schema";
 import { transporter } from "@/lib/nodemailer";
-import { generateVolunteerAckEmail } from "@/lib/emails/volunteer-ack";
+import { generateVolunteerAckEmail } from "@/lib/emails/volunteer-emails";
 
 export async function submitVolunteerApplication(formData: FormData) {
   const supabase = await createClient();
