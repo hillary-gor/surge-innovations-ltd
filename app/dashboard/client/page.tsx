@@ -24,6 +24,7 @@ import {
   Flag,
   Activity
 } from "lucide-react";
+import { PlanRequiredModal } from "./plan-required-modal";
 
 export default async function ClientDashboardPage() {
   const supabase = await createClient();
@@ -105,6 +106,8 @@ export default async function ClientDashboardPage() {
   return (
     <div className="flex flex-col gap-8 p-4 md:p-8 min-h-screen bg-background max-w-6xl mx-auto">
       
+      <PlanRequiredModal hasActivePlan={!!subscription} />
+
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div className="flex items-center gap-4">
           <Avatar className="h-16 w-16 border-2 border-primary/20">
@@ -284,42 +287,42 @@ export default async function ClientDashboardPage() {
                           </div>
                         </div>
                       ))
-                   ) : (
-                     <>
-                       {subscription && (
-                         <div className="flex items-start gap-4 p-4">
-                           <div className="bg-green-100 p-2 rounded-full">
-                             <Zap className="h-4 w-4 text-green-600" />
-                           </div>
-                           <div>
-                             <p className="text-sm font-medium">Subscription Active</p>
-                             <p className="text-xs text-muted-foreground">
-                               Your <strong>{subscription.plans?.name}</strong> plan is running smoothly.
-                             </p>
-                           </div>
-                           <div className="ml-auto text-xs text-muted-foreground">Today</div>
-                         </div>
-                       )}
-                       {nextVisit && (
-                         <div className="flex items-start gap-4 p-4">
-                           <div className="bg-orange-100 p-2 rounded-full">
-                             <Clock className="h-4 w-4 text-orange-600" />
-                           </div>
-                           <div>
-                             <p className="text-sm font-medium">Site Visit Scheduled</p>
-                             <p className="text-xs text-muted-foreground">
-                               Technician arriving on {new Date(nextVisit.preferred_date).toLocaleDateString()}.
-                             </p>
-                           </div>
-                         </div>
-                       )}
-                       {!subscription && !nextVisit && (
-                         <div className="p-8 text-center text-muted-foreground">
-                           No recent activity to report.
-                         </div>
-                       )}
-                     </>
-                   )}
+                    ) : (
+                      <>
+                        {subscription && (
+                          <div className="flex items-start gap-4 p-4">
+                            <div className="bg-green-100 p-2 rounded-full">
+                              <Zap className="h-4 w-4 text-green-600" />
+                            </div>
+                            <div>
+                              <p className="text-sm font-medium">Subscription Active</p>
+                              <p className="text-xs text-muted-foreground">
+                                Your <strong>{subscription.plans?.name}</strong> plan is running smoothly.
+                              </p>
+                            </div>
+                            <div className="ml-auto text-xs text-muted-foreground">Today</div>
+                          </div>
+                        )}
+                        {nextVisit && (
+                          <div className="flex items-start gap-4 p-4">
+                            <div className="bg-orange-100 p-2 rounded-full">
+                              <Clock className="h-4 w-4 text-orange-600" />
+                            </div>
+                            <div>
+                              <p className="text-sm font-medium">Site Visit Scheduled</p>
+                              <p className="text-xs text-muted-foreground">
+                                Technician arriving on {new Date(nextVisit.preferred_date).toLocaleDateString()}.
+                              </p>
+                            </div>
+                          </div>
+                        )}
+                        {!subscription && !nextVisit && (
+                          <div className="p-8 text-center text-muted-foreground">
+                            No recent activity to report.
+                          </div>
+                        )}
+                      </>
+                    )}
                 </div>
               </CardContent>
             </Card>
