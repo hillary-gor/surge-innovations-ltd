@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { postTimelineUpdateAction } from "../actions";
 import { toast } from "sonner";
+import { Send, Loader2 } from "lucide-react"; // Import Icons
 
 export function AdminTimelineForm({ projectId }: { projectId: string }) {
   const [loading, setLoading] = useState(false);
@@ -28,7 +29,7 @@ export function AdminTimelineForm({ projectId }: { projectId: string }) {
     setLoading(false);
 
     if (res.success) {
-      toast.success("Update posted to client timeline");
+      toast.success("Update posted & client notified!");
       setFormData({ title: "", description: "", update_type: "general" });
     } else {
       toast.error("Failed to post");
@@ -68,11 +69,18 @@ export function AdminTimelineForm({ projectId }: { projectId: string }) {
         placeholder="Details visible to client..." 
         value={formData.description}
         onChange={e => setFormData({...formData, description: e.target.value})}
+        className="min-h-[100px]"
       />
 
-      <div className="flex justify-end">
+      <div className="flex items-center justify-between pt-2">
+        <span className="text-xs text-muted-foreground flex items-center gap-1">
+           <Send className="w-3 h-3 text-blue-500" />
+           Client will be emailed automatically.
+        </span>
         <Button type="submit" disabled={loading}>
-          {loading ? "Posting..." : "Post to Timeline"}
+          {loading ? (
+             <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Sending...</>
+          ) : "Post to Timeline"}
         </Button>
       </div>
     </form>

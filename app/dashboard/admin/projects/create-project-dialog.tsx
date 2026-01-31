@@ -11,7 +11,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { createProjectAction } from "./actions";
 import { toast } from "sonner";
-import { Plus, Loader2 } from "lucide-react";
+import { Plus, Loader2, Send } from "lucide-react";
 
 interface Client {
   id: string;
@@ -56,10 +56,10 @@ export function CreateProjectDialog({ clients }: { clients: Client[] }) {
           <Plus className="w-4 h-4 mr-2" /> New Project
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-125">
+      <DialogContent className="sm:max-w-[500px]">
         <DialogHeader>
           <DialogTitle>Create New Project</DialogTitle>
-          <DialogDescription>Start a new development track for a client.</DialogDescription>
+          <DialogDescription>Start a new development track. The client will be emailed.</DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4 py-4">
           
@@ -107,7 +107,10 @@ export function CreateProjectDialog({ clients }: { clients: Client[] }) {
             />
           </div>
 
-          <div className="flex justify-end pt-4">
+          <div className="flex items-center justify-between pt-4">
+            <span className="text-xs text-muted-foreground flex items-center gap-1">
+               <Send className="w-3 h-3" /> Sends welcome email
+            </span>
             <Button type="submit" disabled={loading}>
               {loading ? (
                 <>
