@@ -56,7 +56,7 @@ export function CreateProjectDialog({ clients }: { clients: Client[] }) {
           <Plus className="w-4 h-4 mr-2" /> New Project
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[500px]">
+      <DialogContent className="sm:max-w-125">
         <DialogHeader>
           <DialogTitle>Create New Project</DialogTitle>
           <DialogDescription>Start a new development track. The client will be emailed.</DialogDescription>
