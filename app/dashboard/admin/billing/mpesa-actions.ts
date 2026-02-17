@@ -1,6 +1,6 @@
 "use server";
 
-import { createClient } from "@/utils/supabase/server";
+import { createClient, createAdminClient } from "@/utils/supabase/server";
 
 async function getMpesaToken() {
   const consumerKey = process.env.MPESA_CONSUMER_KEY!;
@@ -19,16 +19,26 @@ async function getMpesaToken() {
 }
 
 export async function triggerMpesaPayment(invoiceId: string, phoneNumber: string) {
+  // 1. Verify if actually an Admin
   const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return { success: false, message: "Unauthorized" };
 
-  const { data: invoice } = await supabase
+  // 2. Use Admin Client for Database Operations (Bypass RLS)
+  const adminSb = await createAdminClient();
+
+  const { data: invoice, error: fetchError } = await adminSb
     .from("invoices")
     .select("amount, invoice_number")
     .eq("id", invoiceId)
     .single();
 
-  if (!invoice) return { success: false, message: "Invoice not found" };
+  if (fetchError || !invoice) {
+    console.error("Invoice Fetch Error:", fetchError);
+    return { success: false, message: "Invoice not found" };
+  }
 
+  // Sanitize Phone Number (254...)
   let formattedPhone = phoneNumber.replace(/\+/g, "").replace(/\s/g, "");
   if (formattedPhone.startsWith("0")) formattedPhone = "254" + formattedPhone.slice(1);
 
@@ -71,7 +81,8 @@ export async function triggerMpesaPayment(invoiceId: string, phoneNumber: string
       throw new Error(mpesaData.errorMessage || "M-PESA failed");
     }
 
-    await supabase
+    // 3. Update Invoice with Checkout ID (Using Admin Client)
+    const { error: updateError } = await adminSb
       .from("invoices")
       .update({
         checkout_request_id: mpesaData.CheckoutRequestID,
@@ -79,6 +90,10 @@ export async function triggerMpesaPayment(invoiceId: string, phoneNumber: string
         status: "pending"
       })
       .eq("id", invoiceId);
+
+    if (updateError) {
+      console.error("Database Update Error:", updateError);
+    }
 
     return { success: true, message: "STK Push sent to client" };
 

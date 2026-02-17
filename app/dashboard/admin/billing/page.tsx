@@ -1,5 +1,4 @@
-import { createClient } from "@/utils/supabase/server";
-import { createAdminClient } from "@/utils/supabase/server";
+import { createClient, createAdminClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 import { InvoiceList, Invoice } from "./invoice-list";
 import { SubscriptionList, Subscription } from "./subscription-list";
@@ -33,8 +32,14 @@ export default async function BillingPage() {
       .select(`*, plans (name, price), profiles (full_name, email)`)
       .eq("status", "active"),
 
-    adminSb.from("plans").select("id, name, price").order("price", { ascending: true })
+    adminSb.from("plans")
+      .select("id, name, price")
+      .order("price", { ascending: true })
   ]);
+
+  if (invoicesRes.error) console.error("Invoice Fetch Error:", invoicesRes.error);
+  if (subscriptionsRes.error) console.error("Subscription Fetch Error:", subscriptionsRes.error);
+  if (plansRes.error) console.error("Plans Fetch Error:", plansRes.error);
 
   const invoices = invoicesRes.data || [];
   const subscriptions = subscriptionsRes.data || [];
@@ -50,7 +55,6 @@ export default async function BillingPage() {
 
   return (
     <div className="flex flex-col gap-6 p-4 md:p-8 min-h-screen bg-background pb-20">
-      
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-3xl font-bold tracking-tight">Billing & Invoices</h1>
