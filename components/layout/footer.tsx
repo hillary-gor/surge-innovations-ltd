@@ -15,12 +15,10 @@ export function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    // REDUCED HEIGHT: Changed pt-16 to pt-10 and pb-8 to pb-6
     <footer className="border-t border-border/50 bg-muted/30 pt-10 pb-6">
       <div className="mx-auto max-w-7xl px-6 md:px-8">
         
         {/* TOP SECTION: Grid Layout */}
-        {/* REDUCED GAP: Changed gap-12 mb-16 to gap-8 mb-10 */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-10">
           
           {/* Column 1: Brand & Bio */}
@@ -66,7 +64,7 @@ export function Footer() {
               <li className="flex items-center gap-2">
                 <Mail className="h-3.5 w-3.5 text-primary" />
                 <a href="mailto:hello@surgeinnovations.org" className="hover:text-foreground transition-colors">
-                  hello@surgeinnovations.org
+                  info@surgeinnovations.org
                 </a>
               </li>
             </ul>
