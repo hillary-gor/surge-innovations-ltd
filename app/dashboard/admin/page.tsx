@@ -12,17 +12,46 @@ import {
   Settings,
   LifeBuoy,
   Receipt,
-  HeartHandshake
+  HeartHandshake,
+  Mail
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 
+interface StatsCardProps {
+  title: string;
+  value: string | number;
+  icon: import("lucide-react").LucideIcon;
+  desc: string;
+  trend?: "high" | "low";
+  className?: string;
+}
+
+function StatsCard({ title, value, icon: Icon, desc, trend, className }: StatsCardProps) {
+  return (
+    <Card className={`bg-card border-border shadow-sm ${className}`}>
+      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 p-4">
+        <CardTitle className="text-xs font-medium uppercase text-muted-foreground tracking-wider">
+          {title}
+        </CardTitle>
+        <Icon className="h-4 w-4 text-muted-foreground opacity-70" />
+      </CardHeader>
+      <CardContent className="p-4 pt-0">
+        <div className="text-xl md:text-2xl font-bold truncate">{value}</div>
+        <p className="text-[10px] md:text-xs text-muted-foreground mt-1 flex items-center gap-1">
+          {trend === "high" && <span className="inline-block w-2 h-2 rounded-full bg-red-500 animate-pulse"/>}
+          {desc}
+        </p>
+      </CardContent>
+    </Card>
+  )
+}
+
 export default async function AdminDashboardPage() {
   const supabase = await createClient();
 
-  // 1. Auth Check
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/auth/signin");
 
@@ -34,7 +63,6 @@ export default async function AdminDashboardPage() {
 
   if (profile?.role !== "admin") redirect("/");
 
-  // 2. Parallel Data Fetching
   const [
     volunteers, 
     messages, 
@@ -51,17 +79,16 @@ export default async function AdminDashboardPage() {
     supabase.from("projects").select("id", { count: "exact", head: true }).in("status", ["planning", "in_progress", "review"])
   ]);
 
-  // 3. Stats Calculation
   const pendingVolunteers = volunteers.count || 0;
   const totalInquiries = techInquiries.count || 0;
   const activeProjects = projects.count || 0;
   const totalDonations = donations.data?.reduce((sum, d) => sum + (d.amount || 0), 0) || 0;
   const donationString = new Intl.NumberFormat('en-KE', { style: 'currency', currency: 'KES' }).format(totalDonations);
 
-  // 4. Management Links (Added Volunteers here too)
   const managementLinks = [
     { title: "Volunteers", href: "/dashboard/admin/volunteers", icon: HeartHandshake, color: "text-pink-600 bg-pink-50" },
     { title: "Messages", href: "/dashboard/admin/messages", icon: MessageSquare, color: "text-blue-600 bg-blue-50" },
+    { title: "Email Hub", href: "/dashboard/admin/email", icon: Mail, color: "text-indigo-600 bg-indigo-50" },
     { title: "Billing", href: "/dashboard/admin/billing", icon: Receipt, color: "text-green-600 bg-green-50" },
     { title: "Settings", href: "/dashboard/admin/settings", icon: Settings, color: "text-gray-600 bg-gray-50" },
     { title: "Support", href: "/dashboard/admin/support", icon: LifeBuoy, color: "text-orange-600 bg-orange-50" },
@@ -70,7 +97,6 @@ export default async function AdminDashboardPage() {
   return (
     <div className="flex flex-col gap-6 p-4 md:p-8 min-h-screen bg-muted/10 text-foreground pb-20 md:pb-8">
       
-      {/* HEADER */}
       <div className="flex flex-col gap-4 md:flex-row md:items-center justify-between">
         <div>
           <h1 className="text-2xl md:text-3xl font-bold tracking-tight">Dashboard</h1>
@@ -82,7 +108,6 @@ export default async function AdminDashboardPage() {
            <Button asChild variant="outline" size="sm" className="h-9">
              <Link href="/">View Site</Link>
            </Button>
-           {/* Process Volunteers Button */}
            <Button asChild size="sm" className="h-9 bg-black text-white hover:bg-gray-800 dark:bg-white dark:text-black">
              <Link href="/dashboard/admin/volunteers">
                <Users className="mr-2 h-4 w-4" /> Process Volunteers
@@ -96,7 +121,6 @@ export default async function AdminDashboardPage() {
         </div>
       </div>
 
-      {/* STATS GRID */}
       <div className="grid gap-3 grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
         <StatsCard 
           title="Projects" 
@@ -136,7 +160,6 @@ export default async function AdminDashboardPage() {
         />
       </div>
 
-      {/* SYSTEM MANAGEMENT SHORTCUTS */}
       <div>
         <h2 className="text-lg font-semibold mb-3">System Management</h2>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
@@ -155,10 +178,8 @@ export default async function AdminDashboardPage() {
         </div>
       </div>
 
-      {/* MAIN CONTENT SPLIT */}
       <div className="grid gap-6 lg:grid-cols-7">
         
-        {/* LEFT COLUMN: Recent Messages */}
         <Card className="lg:col-span-4 bg-card border-border shadow-sm">
           <CardHeader className="pb-3">
             <div className="flex items-center justify-between">
@@ -206,7 +227,6 @@ export default async function AdminDashboardPage() {
           </CardContent>
         </Card>
 
-        {/* RIGHT COLUMN: Schedule */}
         <Card className="lg:col-span-3 bg-card border-border shadow-sm h-fit">
           <CardHeader className="pb-3">
              <div className="flex items-center justify-between">
@@ -251,33 +271,4 @@ export default async function AdminDashboardPage() {
       </div>
     </div>
   );
-}
-
-interface StatsCardProps {
-  title: string;
-  value: string | number;
-  icon: import("lucide-react").LucideIcon;
-  desc: string;
-  trend?: "high" | "low";
-  className?: string;
-}
-
-function StatsCard({ title, value, icon: Icon, desc, trend, className }: StatsCardProps) {
-  return (
-    <Card className={`bg-card border-border shadow-sm ${className}`}>
-      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 p-4">
-        <CardTitle className="text-xs font-medium uppercase text-muted-foreground tracking-wider">
-          {title}
-        </CardTitle>
-        <Icon className="h-4 w-4 text-muted-foreground opacity-70" />
-      </CardHeader>
-      <CardContent className="p-4 pt-0">
-        <div className="text-xl md:text-2xl font-bold truncate">{value}</div>
-        <p className="text-[10px] md:text-xs text-muted-foreground mt-1 flex items-center gap-1">
-          {trend === "high" && <span className="inline-block w-2 h-2 rounded-full bg-red-500 animate-pulse"/>}
-          {desc}
-        </p>
-      </CardContent>
-    </Card>
-  )
 }
