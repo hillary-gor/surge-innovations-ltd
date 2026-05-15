@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useCallback } from "react";
 import { useEditor, EditorContent, Editor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Image from '@tiptap/extension-image';
@@ -12,15 +13,11 @@ import { toast } from 'sonner';
 interface RichTextEditorProps {
   value: string;
   onChange: (value: string) => void;
-  onImageUploaded?: (url: string, path: string) => void;
 }
 
-export function RichTextEditor({ 
-  value, 
-  onChange,
-  onImageUploaded 
-}: RichTextEditorProps) {
+export function RichTextEditor({ value, onChange }: RichTextEditorProps) {
   const supabase = createClient();
+  const [, setUploadedPaths] = useState<string[]>([]);
 
   const handleImageUpload = async (file: File) => {
     const fileExt = file.name.split('.').pop() || 'png';
@@ -45,10 +42,33 @@ export function RichTextEditor({
       
     toast.dismiss();
     
-    if (onImageUploaded) onImageUploaded(data.publicUrl, filePath);
+    setUploadedPaths((prev) => [...prev, filePath]);
     
     return data.publicUrl;
   };
+
+  const runGarbageCollection = useCallback(async (currentEditor: Editor) => {
+    const htmlContent = currentEditor.getHTML();
+    
+    setUploadedPaths((prevPaths) => {
+      const orphanedPaths = prevPaths.filter((path) => !htmlContent.includes(path));
+      
+      if (orphanedPaths.length > 0) {
+        supabase.storage
+          .from('email-assets')
+          .remove(orphanedPaths)
+          .then(({ error }) => {
+            if (error) {
+              console.error("Garbage collection failed for paths:", orphanedPaths, error);
+            }
+          });
+          
+        return prevPaths.filter((path) => htmlContent.includes(path));
+      }
+      
+      return prevPaths;
+    });
+  }, [supabase]);
 
   const editor = useEditor({
     immediatelyRender: false,
@@ -87,7 +107,11 @@ export function RichTextEditor({
         return false;
       }
     },
-    onUpdate: ({ editor }: { editor: Editor }) => onChange(editor.getHTML()),
+    onUpdate: ({ editor }: { editor: Editor }) => {
+      const currentHtml = editor.getHTML();
+      onChange(currentHtml);
+      runGarbageCollection(editor);
+    },
   });
 
   if (!editor) return null;

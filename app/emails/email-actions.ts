@@ -12,7 +12,7 @@ export async function sendClientEmail(formData: FormData) {
   const message = formData.get("message") as string;
   const recipientGroup = formData.get("recipientGroup") as string;
   const specificEmail = formData.get("specificEmail") as string;
-  const heroImage = formData.get("heroImage") as File | null;
+  const heroImageUrl = formData.get("heroImageUrl") as string || undefined;
 
   if (!subject || !message || !recipientGroup) {
     return { error: "Missing required fields" };
@@ -32,11 +32,20 @@ export async function sendClientEmail(formData: FormData) {
   if (profile?.role !== "admin") return { error: "Unauthorized" };
 
   let recipients: string[] = [];
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
   try {
     if (recipientGroup === "specific_client") {
-      if (!specificEmail) return { error: "Please select a specific client." };
-      recipients = [specificEmail];
+      if (!specificEmail) return { error: "Destination target parameters missing." };
+      
+      const parsedEmails = specificEmail.split(",").map(e => e.trim()).filter(Boolean);
+      
+      for (const email of parsedEmails) {
+        if (!emailRegex.test(email)) {
+          return { error: `Invalid email structure detected: "${email}"` };
+        }
+      }
+      recipients = parsedEmails;
     } else if (recipientGroup === "all_clients") {
       const { data } = await supabase.from("profiles").select("email").eq("role", "client");
       recipients = data?.map(d => d.email) || [];
@@ -51,29 +60,7 @@ export async function sendClientEmail(formData: FormData) {
     recipients = [...new Set(recipients)];
 
     if (recipients.length === 0) {
-      return { error: "No recipients found for this group." };
-    }
-
-    let heroImageUrl: string | undefined = undefined;
-
-    if (heroImage && heroImage.size > 0) {
-      const buffer = Buffer.from(await heroImage.arrayBuffer());
-      const fileExt = heroImage.name.split('.').pop() || 'png';
-      const fileName = `hero-${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`;
-
-      const { data: uploadData, error: uploadError } = await supabase.storage
-        .from("email-assets")
-        .upload(fileName, buffer, {
-          contentType: heroImage.type,
-          upsert: false,
-        });
-
-      if (!uploadError && uploadData) {
-        const { data: publicUrlData } = supabase.storage
-          .from("email-assets")
-          .getPublicUrl(uploadData.path);
-        heroImageUrl = publicUrlData.publicUrl;
-      }
+      return { error: "No recipients found for this selection tier." };
     }
 
     const generatedAntiClipId = `msg-${Date.now()}-${Math.floor(Math.random() * 10000)}`;
@@ -82,7 +69,7 @@ export async function sendClientEmail(formData: FormData) {
       AdminBroadcastEmail({ 
         subject: subject, 
         message: message,
-        userFirstname: recipientGroup === "specific_client" ? "Client" : "there", 
+        userFirstname: recipients.length === 1 ? "Client" : "there", 
         antiClipId: generatedAntiClipId,
         heroImageUrl: heroImageUrl
       })
@@ -104,6 +91,6 @@ export async function sendClientEmail(formData: FormData) {
     if (error instanceof Error) {
       return { error: error.message };
     }
-    return { error: "Failed to send email." };
+    return { error: "Failed to send email execution stream." };
   }
 }
