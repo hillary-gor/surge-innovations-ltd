@@ -160,17 +160,22 @@ export const InvoicePDF = ({
 
         {/* PAYMENT INSTRUCTIONS */}
         <View style={styles.paymentSection}>
-          <Text style={styles.paymentTitle}>How to Pay via M-PESA</Text>
+          <Text style={styles.paymentTitle}>Payment Instructions</Text>
+          <Text style={{ fontSize: 9, marginBottom: 8, color: '#475569' }}>
+            Please make payment via M-PESA Send Money to:
+          </Text>
+          
           <View style={styles.mpesaRow}>
-            <Text style={styles.mpesaLabel}>Business No:</Text>
-            <Text style={styles.mpesaValue}>123456</Text>
+            <Text style={styles.mpesaLabel}>Phone Number:</Text>
+            <Text style={styles.mpesaValue}>0113015069</Text>
           </View>
           <View style={styles.mpesaRow}>
-            <Text style={styles.mpesaLabel}>Account No:</Text>
-            <Text style={styles.mpesaValue}>{invoiceNum}</Text>
+            <Text style={styles.mpesaLabel}>Name:</Text>
+            <Text style={styles.mpesaValue}>Hillari Gor</Text>
           </View>
-          <Text style={{ fontSize: 8, color: '#94a3b8', marginTop: 8 }}>
-            Please use the Invoice Number as the Account Number.
+
+          <Text style={{ fontSize: 9, marginTop: 10, fontWeight: 'bold', color: '#1e293b' }}>
+            Reference: {invoiceNum}
           </Text>
         </View>
 
